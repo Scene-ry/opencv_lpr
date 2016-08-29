@@ -14,6 +14,8 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-g" />
+					<Add directory="include" />
+					<Add directory="include/thin" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --cflags --libs opencv`" />
@@ -27,6 +29,8 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-s" />
+					<Add directory="include" />
+					<Add directory="include/thin" />
 				</Compiler>
 			</Target>
 		</Build>
@@ -36,7 +40,10 @@
 		<Linker>
 			<Add option="`opencv-config --ldstaticflags`" />
 		</Linker>
-		<Unit filename="chepai.jpg" />
+		<Unit filename="include/PreProcess.cpp" />
+		<Unit filename="include/PreProcess.h" />
+		<Unit filename="include/thin/Thin.cpp" />
+		<Unit filename="include/thin/Thin.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
