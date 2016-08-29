@@ -1,13 +1,17 @@
+#include "include/recog/JudgeChar.h"
 #include "include/PreProcess.h"
+#include "include/recog/GetCos.hpp"
 
 int main()
 {
-    PreProcess pre;
-
     const char* img_dir = "./images/";
-    const char* filename = "chepai3";
+    const char* filename = "chepai1";
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".png", false);
+    PreProcess pre;
+    JudgeChar jc(img_dir);
+
+    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", true);
+    //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)
     {
@@ -28,7 +32,9 @@ int main()
         std::cout << "Reading cropped image " << i << "..." << std::endl;
 
         // begin recognition
+        std::cout << jc.GetChar(char_mat) << std::endl;
 
+        std::cout << std::endl;
     }
 
     return 0;
