@@ -16,6 +16,8 @@
 					<Add option="-g" />
 					<Add directory="include" />
 					<Add directory="include/thin" />
+					<Add directory="include/recog" />
+					<Add directory="recog" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --cflags --libs opencv`" />
@@ -31,6 +33,8 @@
 					<Add option="-s" />
 					<Add directory="include" />
 					<Add directory="include/thin" />
+					<Add directory="include/recog" />
+					<Add directory="recog" />
 				</Compiler>
 			</Target>
 		</Build>
@@ -42,6 +46,13 @@
 		</Linker>
 		<Unit filename="include/PreProcess.cpp" />
 		<Unit filename="include/PreProcess.h" />
+		<Unit filename="include/recog/DepthCalc.cpp" />
+		<Unit filename="include/recog/DepthCalc.h" />
+		<Unit filename="include/recog/GetCos.hpp" />
+		<Unit filename="include/recog/JudgeChar.cpp" />
+		<Unit filename="include/recog/JudgeChar.h" />
+		<Unit filename="include/recog/SlopeCalc.cpp" />
+		<Unit filename="include/recog/SlopeCalc.h" />
 		<Unit filename="include/thin/Thin.cpp" />
 		<Unit filename="include/thin/Thin.h" />
 		<Unit filename="main.cpp" />
