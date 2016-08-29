@@ -27,7 +27,7 @@ class PreProcess
 {
 public:
     std::string IntToString(int);
-    ProcessResult pre_process(const char*, const char*, bool);
+    ProcessResult pre_process(const char*, const char*, const char*, bool);
 
 private:
     Thin thinner;

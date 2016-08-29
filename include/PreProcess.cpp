@@ -29,10 +29,9 @@ void AddBlackEdge(const Mat& src, Mat& dst)
     }
 }
 
-ProcessResult PreProcess::pre_process(const char* filename, const char* extname, bool toReverse)
+ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename, const char* extname, bool toReverse)
 {
-    std::string s_filename = std::string("./images/") + filename + extname;
-    std::cout << s_filename << std::endl;
+    std::string s_filename = std::string(img_dir) + filename + extname;
     Mat src = imread(s_filename.c_str());
 
     if (!src.data)
@@ -105,10 +104,10 @@ ProcessResult PreProcess::pre_process(const char* filename, const char* extname,
         //erode(tmp, tmp, kernel);
         //dilate(tmp, tmp, 0);
 
-        std::string s = std::string("./images/crops/") + filename + "_cut_" + IntToString(i++) + ".jpg";
-        imwrite(s.c_str(), tmp_thin);
+        std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
+        imwrite(s_filename.c_str(), tmp_thin);
 
-        rectangle(src, r, Scalar(125), 1);
+        //rectangle(src, r, Scalar(125), 1);
     }
 
     //imshow("window", src);
