@@ -2,13 +2,15 @@
 #include "include/PreProcess.h"
 #include "include/recog/GetCos.hpp"
 
+#define CHAR_MAX_WIDTH  10
+#define CHAR_MAX_HEIGHT 100
+
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai2";
+    const char* filename = "chepai4";
 
-    PreProcess pre;
-    JudgeChar jc(img_dir);
+    PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
@@ -21,6 +23,7 @@ int main()
 
     std::cout << std::endl;
 
+    JudgeChar jc(img_dir);
     for (int i = 0; true; i++)
     {
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i) + ".jpg";
@@ -32,7 +35,11 @@ int main()
         std::cout << "Reading cropped image " << i << "..." << std::endl;
 
         // begin recognition
-        std::cout << jc.GetChar(char_mat) << std::endl;
+        std::vector<char> possible_chars = jc.GetChar(char_mat);
+        for (int i = 0; i < possible_chars.size(); i++)
+        {
+            std::cout << possible_chars.at(i) << " ";
+        }
 
         std::cout << std::endl;
     }

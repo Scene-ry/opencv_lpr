@@ -17,7 +17,7 @@ static char Distinguish_0_8_Q(const Mat& mat)
         for (int h = 0; h < mat.rows; h++)
         {
             int pixel = (int)mat.at<uchar>(h, w * 3);
-            if (pixel >= 125 && last_pixel < 125)
+            if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
             {
                 white_area_count++;
             }

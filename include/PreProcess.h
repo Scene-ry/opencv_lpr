@@ -3,14 +3,12 @@
 
 #include "thin/Thin.h"
 #include "Common.h"
+#include "crop/Cropper.hpp"
 
 #include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <string>
-
-#define CHAR_MAX_WIDTH  15
-#define CHAR_MAX_HEIGHT 30
 
 enum ProcessResult
 {
@@ -21,10 +19,12 @@ enum ProcessResult
 class PreProcess
 {
 public:
+    PreProcess(int, int);
     ProcessResult pre_process(const char*, const char*, const char*, bool);
 
 private:
     Thin thinner;
+    int char_max_width, char_max_height;
 };
 
 #endif // PREPROCESS_H

@@ -7,8 +7,10 @@
 
 using namespace cv;
 
-#define CROP_WIDTH  20
-#define CROP_HEIGHT 40
+#define CROP_WIDTH        20
+#define CROP_HEIGHT       40
+#define WHITE_THRESHOLD   80
+#define SIMILAR_THRESHOLD 0.28
 
 static std::string IntToString(int num)
 {

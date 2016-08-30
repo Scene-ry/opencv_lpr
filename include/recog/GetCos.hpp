@@ -9,14 +9,14 @@ class GetCos
 public:
     static double GetVectorCos(const std::vector<double>& v1, const std::vector<double>& v2)
     {
-        double numerator = 0;
-        double denominator_l = 0, denominator_r = 0;
-
         int v1_size = v1.size();
         if (v1_size != v2.size())
         {
             return 0;
         }
+
+        double numerator = 0;
+        double denominator_l = 0, denominator_r = 0;
 
         for (int i = 0; i < v1_size; i++)
         {
