@@ -1,15 +1,5 @@
 #include "PreProcess.h"
 
-std::string PreProcess::IntToString(int num)
-{
-    std::string res;
-    std::stringstream ss;
-    ss << num;
-    ss >> res;
-    ss.clear();
-    return res;
-}
-
 void AddBlackEdge(const Mat& src, Mat& dst)
 {
     int width = src.cols;
@@ -90,7 +80,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
         // normalization
         Mat tmp_resize;
-        resize(tmp, tmp_resize, Size(RESIZE_WIDTH - 2, RESIZE_HEIGHT - 2));
+        resize(tmp, tmp_resize, Size(CROP_WIDTH - 2, CROP_HEIGHT - 2));
 
         // add black edge
         Mat tmp_edge;

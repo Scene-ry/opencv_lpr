@@ -2,26 +2,27 @@
 #define JUDGECHAR_H
 
 #include "GetCos.hpp"
-#include "SlopeCalc.h"
-#include "DepthCalc.h"
-#include "../PreProcess.h"
+#include "FeatureVectorHelper.h"
+#include "../Common.h"
+
+#include "Distinguishers.hpp"
+
 #include <vector>
-#include <string>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
 using namespace cv;
 
 class JudgeChar
 {
 public:
-    std::vector<double> StdCharVectors[36];
+    std::vector<double> StdCharVectorsLeft[36];
+    std::vector<double> StdCharVectorsRight[36];
+    std::vector<double> StdCharVectorsUp[36];
+    std::vector<double> StdCharVectorsDown[36];
     JudgeChar(const char*);
     char GetChar(const Mat&);
 
 private:
-    SlopeCalc sc;
-    DepthCalc dc;
+    FeatureVectorHelper fvec;
 };
 
 #endif // JUDGECHAR_H

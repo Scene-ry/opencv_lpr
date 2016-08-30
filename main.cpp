@@ -23,7 +23,7 @@ int main()
 
     for (int i = 0; true; i++)
     {
-        std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + pre.IntToString(i) + ".jpg";
+        std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i) + ".jpg";
         Mat char_mat = imread(s_filename);
 
         if (!char_mat.data)
