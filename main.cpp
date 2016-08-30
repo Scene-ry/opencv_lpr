@@ -5,12 +5,12 @@
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai1";
+    const char* filename = "chepai2";
 
     PreProcess pre;
     JudgeChar jc(img_dir);
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", true);
+    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)

@@ -2,10 +2,9 @@
 
 JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
 {
-    // Initialize static array
     for (int i = 0; i <= 9; i++)
     {
-        std::string std_img_file = std::string(img_dir) + "standard/" + IntToString(i) + ".jpg";
+        std::string std_img_file = std::string(img_dir) + "standard/20x40/" + IntToString(i) + ".jpg";
         Mat std_img = imread(std_img_file.c_str());
 
         fvec.AddSampleDepthVectorLeft(std_img, StdCharVectorsLeft[i]);
@@ -23,7 +22,7 @@ JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
             continue;
         }
 
-        std::string std_img_file = std::string(img_dir) + "standard/" + ch + ".jpg";
+        std::string std_img_file = std::string(img_dir) + "standard/20x40/" + ch + ".jpg";
         Mat std_img = imread(std_img_file.c_str());
 
         fvec.AddSampleDepthVectorLeft(std_img, StdCharVectorsLeft[i]);
@@ -65,9 +64,9 @@ char JudgeChar::GetChar(const Mat& mat)
         }
     }
 
-    if (res == '0' || res == 'Q')
+    if (res == '0' || res == 'Q' || res == '8')
     {
-        return DistinguishZeroQ(mat);
+        return Distinguish_0_8_Q(mat);
     }
     if (res == '2' || res == 'Z')
     {

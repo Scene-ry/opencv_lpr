@@ -11,10 +11,7 @@ void AddBlackEdge(const Mat& src, Mat& dst)
     {
         for (int w = 0; w < width; w++)
         {
-            int src_offset = h * width + w;
-            int dst_offset = (h + 1) * (width + 2) + w + 1;
-            if ((int)src.data[src_offset] != 0)
-                dst.data[dst_offset] = src.data[src_offset];
+            dst.at<uchar>(h + 1, w + 1) = src.at<uchar>(h, w);
         }
     }
 }
