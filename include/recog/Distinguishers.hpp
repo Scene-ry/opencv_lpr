@@ -40,4 +40,42 @@ static char Distinguish_0_8_Q(const Mat& mat)
     return '0';
 }
 
+static char Distinguish_2_Z(const Mat& mat)
+{
+    int width = mat.cols, height = mat.rows;
+    int last_h = -1, last_w = -1;
+    double last_slope;
+    double slope_diff_sum = 0;
+    bool last_slope_exist = false;
+
+    for (int w = 0; w < width; w++)
+    {
+        for (int h = 0; h < height; h++)
+        {
+            int pixel = (int)mat.at<uchar>(h, w);
+            if (pixel >= WHITE_THRESHOLD)
+            {
+                if (last_h != -1 && h - last_h > 0.0001)
+                {
+                    double k = (w - last_w) / (double)(h - last_h);
+                    if (last_slope_exist)
+                    {
+                        slope_diff_sum += std::fabs(k - last_slope);
+                    }
+                    last_slope_exist = true;
+                    last_slope = k;
+                }
+                last_h = h;
+                last_w = w;
+            }
+        }
+    }
+
+    std::cout << slope_diff_sum << std::endl;
+    if (slope_diff_sum < 0.05)
+        return 'Z';
+
+    return '2';
+}
+
 #endif

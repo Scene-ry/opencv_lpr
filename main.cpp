@@ -4,7 +4,7 @@
 #include "include/recog/Distinguishers.hpp"
 
 #define CHAR_MAX_WIDTH  5
-#define CHAR_MAX_HEIGHT 20
+#define CHAR_MAX_HEIGHT 30
 
 int main()
 {
@@ -43,6 +43,10 @@ int main()
         if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
         {
             recog = Distinguish_0_8_Q(char_mat);
+        }
+        else if (possible_chars.find('2') != std::string::npos || possible_chars.find('Z') != std::string::npos)
+        {
+            recog = Distinguish_2_Z(char_mat);
         }
 
         std::cout << "Possible chars: ";

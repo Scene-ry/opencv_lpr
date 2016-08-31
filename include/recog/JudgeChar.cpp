@@ -43,8 +43,6 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat)
     fvec.AddSampleDepthVectorUp(mat, mat_vec_up);
     fvec.AddSampleDepthVectorDown(mat, mat_vec_down);
 
-    double min_value = 1;
-//    char res = '\0';
     for (int i = 0; i < 36; i++)
     {
         double cos_value_left = GetCos::GetVectorCos(mat_vec_left, StdCharVectorsLeft[i]);
@@ -52,39 +50,30 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat)
         double cos_value_up = GetCos::GetVectorCos(mat_vec_up, StdCharVectorsUp[i]);
         double cos_value_down = GetCos::GetVectorCos(mat_vec_down, StdCharVectorsDown[i]);
 
-        double cos_value = (0.8 * cos_value_left + 0.8 * cos_value_up + 0.7 * cos_value_right + 0.9 * cos_value_down) / 4.0;
+        double cos_value = (cos_value_left + cos_value_up + cos_value_right + cos_value_down) / 4.0;
         if (i >= 0 && i <= 9)
         {
             char_cos_values.insert(std::make_pair('0' + i, cos_value));
-            if (1 - cos_value <= SIMILAR_THRESHOLD)
+            if (cos_value >= SIMILAR_THRESHOLD)
                 res.append(1, '0' + i);
         }
         else
         {
             char_cos_values.insert(std::make_pair('A' + i - 10, cos_value));
-            if (1 - cos_value <= SIMILAR_THRESHOLD)
+            if (cos_value >= SIMILAR_THRESHOLD)
                 res.append(1, 'A' + i - 10);
         }
     }
 
     // increase threshold until a char matches
-    for (double higher_th = SIMILAR_THRESHOLD - 0.01; res.length() <= 0; higher_th += 0.01)
+    for (double lower_th = SIMILAR_THRESHOLD - 0.01; res.length() <= 0; lower_th -= 0.01)
     {
         for (std::map<char, double>::iterator it = char_cos_values.begin(); it != char_cos_values.end(); it++)
         {
-            if (1 - it->second <= higher_th)
+            if (it->second >= lower_th)
                 res.append(1, it->first);
         }
     }
-
-//    if (res == '0' || res == 'Q' || res == '8')
-//    {
-//        return Distinguish_0_8_Q(mat);
-//    }
-//    if (res == '2' || res == 'Z')
-//    {
-//
-//    }
 
     return res;
 }

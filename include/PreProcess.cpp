@@ -93,16 +93,20 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
         // normalization
         Mat tmp_resize;
-        resize(tmp_crop, tmp_resize, Size(CROP_WIDTH, CROP_HEIGHT));
+        resize(tmp_crop, tmp_resize, Size(CROP_WIDTH - 2, CROP_HEIGHT - 2));
 
         threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
+
+        // add black edge
+        Mat tmp_resize_edge;
+        AddBlackEdge(tmp_resize, tmp_resize_edge);
 
         //Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
         //erode(tmp, tmp, kernel);
         //dilate(tmp, tmp, 0);
 
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
-        imwrite(s_filename.c_str(), tmp_resize);
+        imwrite(s_filename.c_str(), tmp_resize_edge);
 
         //rectangle(src, r, Scalar(125), 1);
     }
