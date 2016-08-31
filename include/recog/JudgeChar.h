@@ -5,8 +5,7 @@
 #include "FeatureVectorHelper.h"
 #include "../Common.h"
 
-#include "Distinguishers.hpp"
-
+#include <map>
 #include <vector>
 
 using namespace cv;
@@ -19,7 +18,7 @@ public:
     std::vector<double> StdCharVectorsUp[36];
     std::vector<double> StdCharVectorsDown[36];
     JudgeChar(const char*);
-    std::vector<char> GetChar(const Mat&);
+    std::string GetPossibleChars(const Mat&);
 
 private:
     FeatureVectorHelper fvec;

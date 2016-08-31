@@ -1,14 +1,15 @@
 #include "include/recog/JudgeChar.h"
 #include "include/PreProcess.h"
 #include "include/recog/GetCos.hpp"
+#include "include/recog/Distinguishers.hpp"
 
-#define CHAR_MAX_WIDTH  10
-#define CHAR_MAX_HEIGHT 100
+#define CHAR_MAX_WIDTH  5
+#define CHAR_MAX_HEIGHT 20
 
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai4";
+    const char* filename = "chepai2";
 
     PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
 
@@ -35,13 +36,27 @@ int main()
         std::cout << "Reading cropped image " << i << "..." << std::endl;
 
         // begin recognition
-        std::vector<char> possible_chars = jc.GetChar(char_mat);
+        std::string possible_chars = jc.GetPossibleChars(char_mat);
+        char recog = '\0';
+
+        // when met some hard-recognized chars
+        if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
+        {
+            recog = Distinguish_0_8_Q(char_mat);
+        }
+
+        std::cout << "Possible chars: ";
         for (int i = 0; i < possible_chars.size(); i++)
         {
             std::cout << possible_chars.at(i) << " ";
         }
 
-        std::cout << std::endl;
+        if (recog != '\0')
+        {
+            std::cout << std::endl << "Recognized as: " << recog;
+        }
+
+        std::cout << std::endl << std::endl;
     }
 
     return 0;
