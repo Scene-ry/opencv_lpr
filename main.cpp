@@ -4,16 +4,16 @@
 #include "include/recog/Distinguishers.hpp"
 
 #define CHAR_MAX_WIDTH  5
-#define CHAR_MAX_HEIGHT 40
+#define CHAR_MAX_HEIGHT 30
 
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai1";
+    const char* filename = "chepai2";
 
     PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", true);
+    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)
@@ -41,19 +41,23 @@ int main()
         char recog = '\0';
 
         // when met some hard-recognized chars
-        if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
+
+        //if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
+        if (recommend == '0' || recommend == '8' || recommend == 'Q')
         {
             recog = Distinguish_0_8_Q(char_mat);
         }
-        else if (possible_chars.find('2') != std::string::npos || possible_chars.find('Z') != std::string::npos)
+        //else if (possible_chars.find('2') != std::string::npos || possible_chars.find('Z') != std::string::npos)
+        else if (recommend == 2 || recommend == 'Z')
         {
             recog = Distinguish_2_Z(char_mat);
         }
-        else if (possible_chars.find('E') != std::string::npos ||
-            possible_chars.find('F') != std::string::npos ||
-            possible_chars.find('H') != std::string::npos ||
-            possible_chars.find('L') != std::string::npos ||
-            possible_chars.find('T') != std::string::npos)
+        //else if (possible_chars.find('E') != std::string::npos ||
+        //    possible_chars.find('F') != std::string::npos ||
+        //    possible_chars.find('H') != std::string::npos ||
+        //    possible_chars.find('L') != std::string::npos ||
+        //    possible_chars.find('T') != std::string::npos)
+        else if (recommend == 'E' || recommend == 'F' || recommend == 'H' || recommend == 'L' || recommend == 'T')
         {
             recog = Distinguish_E_F_H_L_T(char_mat);
         }
@@ -64,13 +68,13 @@ int main()
             std::cout << possible_chars.at(i) << " ";
         }
 
-        if (recommend != '\0')
-        {
-            std::cout << std::endl << "Recommend: " << recommend;
-        }
         if (recog != '\0')
         {
             std::cout << std::endl << "Recognized as: " << recog;
+        }
+        else if (recommend != '\0')
+        {
+            std::cout << std::endl << "Recommend: " << recommend;
         }
 
         std::cout << std::endl << std::endl;

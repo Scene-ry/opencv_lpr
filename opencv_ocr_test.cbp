@@ -47,7 +47,6 @@
 		<Unit filename="include/Common.h" />
 		<Unit filename="include/PreProcess.cpp" />
 		<Unit filename="include/PreProcess.h" />
-		<Unit filename="include/crop/Cropper.hpp" />
 		<Unit filename="include/recog/Distinguishers.hpp" />
 		<Unit filename="include/recog/FeatureVectorHelper.cpp" />
 		<Unit filename="include/recog/FeatureVectorHelper.h" />
