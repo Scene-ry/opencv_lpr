@@ -3,8 +3,8 @@
 #include "include/recog/GetCos.hpp"
 #include "include/recog/Distinguishers.hpp"
 
-#define CHAR_MAX_WIDTH  5
-#define CHAR_MAX_HEIGHT 25
+#define CHAR_MAX_WIDTH  1
+#define CHAR_MAX_HEIGHT 20
 
 int main()
 {
@@ -43,12 +43,12 @@ int main()
         // when met some hard-recognized chars
 
         //if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
-        if (recommend == '0' || recommend == '8' || recommend == 'Q')
+        if (recommend == '0' || recommend == '8' || recommend == 'B' || recommend == 'Q')
         {
-            recog = Distinguish_0_8_Q(char_mat);
+            recog = Distinguish_0_8_B_Q(char_mat);
         }
         //else if (possible_chars.find('2') != std::string::npos || possible_chars.find('Z') != std::string::npos)
-        else if (recommend == 2 || recommend == 'Z')
+        else if (recommend == '2' || recommend == 'Z')
         {
             recog = Distinguish_2_Z(char_mat);
         }

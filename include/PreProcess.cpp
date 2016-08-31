@@ -15,7 +15,8 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     }
 
     // window
-    //namedWindow("window", CV_WINDOW_AUTOSIZE);
+    //namedWindow("original", CV_WINDOW_AUTOSIZE);
+    //namedWindow("thinned", CV_WINDOW_AUTOSIZE);
 
     // convert to gray
     cvtColor(src, src, CV_BGR2GRAY);
@@ -27,9 +28,15 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     if (toReverse)
         bitwise_not(src, src);
 
+    // dilate
+    Mat src_dilate;// = src.clone();
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+    dilate(src, src_dilate, kernel);
+    //erode(tmp, tmp, 0);
+
     // thinning
     Mat src_thin;
-    thinner.Thinning_2(src, src_thin);
+    thinner.Thinning_2(src_dilate, src_thin);
 
     // get the contours
     std::vector<std::vector<Point> > contours;
@@ -78,7 +85,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
             {
                 for (int w = 0; w < tmp.cols; w++)
                 {
-                    tmp_resize.at<uchar>(h, ((CROP_WIDTH - tmp.cols) / 2 + w) * 3) = 255;
+                    tmp_resize.at<uchar>(h, ((CROP_WIDTH - tmp.cols) / 2 + w)) = 255;
                 }
             }
         }
@@ -90,17 +97,14 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
         threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
 
-        //Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
-        //erode(tmp, tmp, kernel);
-        //dilate(tmp, tmp, 0);
-
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
         imwrite(s_filename.c_str(), tmp_resize);
 
-        //rectangle(src, r, Scalar(125), 1);
+        //rectangle(src_thin, r, Scalar(125), 1);
     }
 
-    //imshow("window", src);
+    //imshow("original", src_dilate);
+    //imshow("thinned", src_thin);
 
     //waitKey();
 
