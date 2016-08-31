@@ -82,10 +82,16 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
     }
 
     // increase threshold until a char matches
+    max_cos_value = 0;
     for (double lower_th = SIMILAR_THRESHOLD - 0.01; res.length() <= 0; lower_th -= 0.01)
     {
         for (std::map<char, double>::iterator it = char_cos_values.begin(); it != char_cos_values.end(); it++)
         {
+            if (it->second > max_cos_value)
+            {
+                recommend = it->first;
+                max_cos_value = it->second;
+            }
             if (it->second >= lower_th)
                 res.append(1, it->first);
         }

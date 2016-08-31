@@ -181,4 +181,24 @@ static char Distinguish_E_F_H_L_T(const Mat& mat)
     return 'L';
 }
 
+static char Distinguish_7_J(const Mat& mat)
+{
+    int height = mat.rows, width = mat.cols;
+
+    // find '7'
+    for (int w = 0; w < width; w++)
+    {
+        int pixel = (int)mat.at<uchar>(height / 2, w * 3);
+        if (pixel >= WHITE_THRESHOLD)
+        {
+            if (std::fabs(width / 2 - w) < 5)
+            {
+                return '7';
+            }
+        }
+    }
+
+    return 'J';
+}
+
 #endif

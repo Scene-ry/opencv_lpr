@@ -61,6 +61,10 @@ int main()
         {
             recog = Distinguish_E_F_H_L_T(char_mat);
         }
+        else if (recommend == '7' || recommend == 'J')
+        {
+            recog = Distinguish_7_J(char_mat);
+        }
 
         std::cout << "Possible chars: ";
         for (int i = 0; i < possible_chars.size(); i++)
