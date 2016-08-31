@@ -69,9 +69,24 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
         Mat tmp(src_thin, rg_row, rg_col);
 
-        // normalization
         Mat tmp_resize;
-        resize(tmp, tmp_resize, Size(CROP_WIDTH, CROP_HEIGHT));
+        if (tmp.cols < 5)
+        {
+            // deal with '1'
+            tmp_resize = Mat::zeros(CROP_HEIGHT, CROP_WIDTH, CV_8UC1);
+            for (int h = 0; h < CROP_HEIGHT; h++)
+            {
+                for (int w = 0; w < tmp.cols; w++)
+                {
+                    tmp_resize.at<uchar>(h, ((CROP_WIDTH - tmp.cols) / 2 + w) * 3) = 255;
+                }
+            }
+        }
+        else
+        {
+            // normalization
+            resize(tmp, tmp_resize, Size(CROP_WIDTH, CROP_HEIGHT));
+        }
 
         threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
 

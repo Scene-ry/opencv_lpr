@@ -4,7 +4,7 @@
 #include "include/recog/Distinguishers.hpp"
 
 #define CHAR_MAX_WIDTH  5
-#define CHAR_MAX_HEIGHT 30
+#define CHAR_MAX_HEIGHT 40
 
 int main()
 {
@@ -49,6 +49,14 @@ int main()
         {
             recog = Distinguish_2_Z(char_mat);
         }
+        else if (possible_chars.find('E') != std::string::npos ||
+            possible_chars.find('F') != std::string::npos ||
+            possible_chars.find('H') != std::string::npos ||
+            possible_chars.find('L') != std::string::npos ||
+            possible_chars.find('T') != std::string::npos)
+        {
+            recog = Distinguish_E_F_H_L_T(char_mat);
+        }
 
         std::cout << "Possible chars: ";
         for (int i = 0; i < possible_chars.size(); i++)
@@ -56,13 +64,13 @@ int main()
             std::cout << possible_chars.at(i) << " ";
         }
 
+        if (recommend != '\0')
+        {
+            std::cout << std::endl << "Recommend: " << recommend;
+        }
         if (recog != '\0')
         {
             std::cout << std::endl << "Recognized as: " << recog;
-        }
-        else if (recommend != '\0')
-        {
-            std::cout << std::endl << "Recommend: " << recommend;
         }
 
         std::cout << std::endl << std::endl;

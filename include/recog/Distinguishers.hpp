@@ -79,4 +79,73 @@ static char Distinguish_2_Z(const Mat& mat)
     return '2';
 }
 
+static char Distinguish_E_F_H_L_T(const Mat& mat)
+{
+    int height = mat.rows, width = mat.cols;
+
+    // find 'T'
+    for (int w = 0; w < width; w++)
+    {
+        int pixel = (int)mat.at<uchar>(height / 2, w * 3);
+        if (pixel >= WHITE_THRESHOLD)
+        {
+            if (std::fabs(width / 2 - w) < 5)
+            {
+                return 'T';
+            }
+        }
+    }
+
+    // find 'H'
+    for (int h = 0; h < height; h++)
+    {
+        int pixel = (int)mat.at<uchar>(h, (width / 2) * 3);
+        if (pixel >= WHITE_THRESHOLD)
+        {
+            if (std::fabs(height / 2 - h) < 5)
+            {
+                return 'H';
+            }
+        }
+    }
+
+    // find 'E'
+    int white_area_count;
+    int last_pixel;
+    for (int w = 0; w < width; w++)
+    {
+        white_area_count = 0;
+        last_pixel = 0;
+        for (int h = 0; h < height; h++)
+        {
+            int pixel = (int)mat.at<uchar>(h, w * 3);
+            if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
+            {
+                white_area_count++;
+            }
+            last_pixel = pixel;
+        }
+
+        if (white_area_count == 3)
+        {
+            return 'E';
+        }
+    }
+
+    // find 'F'
+    for (int h = 0; h < height; h++)
+    {
+        int pixel = (int)mat.at<uchar>(h, (width / 2) * 3);
+        if (pixel >= WHITE_THRESHOLD)
+        {
+            if (h < 5)
+            {
+                return 'F';
+            }
+        }
+    }
+
+    return 'L';
+}
+
 #endif

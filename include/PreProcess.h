@@ -3,7 +3,6 @@
 
 #include "thin/Thin.h"
 #include "Common.h"
-#include "crop/Cropper.hpp"
 
 #include <algorithm>
 #include <iostream>
