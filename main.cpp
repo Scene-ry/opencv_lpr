@@ -4,16 +4,16 @@
 #include "include/recog/Distinguishers.hpp"
 
 #define CHAR_MAX_WIDTH  5
-#define CHAR_MAX_HEIGHT 30
+#define CHAR_MAX_HEIGHT 25
 
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai2";
+    const char* filename = "chepai3";
 
     PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
+    ProcessResult result = pre.pre_process(img_dir, filename, ".png", false);
     //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)

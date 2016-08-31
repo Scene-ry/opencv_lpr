@@ -2,34 +2,34 @@
 
 JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
 {
-    for (int i = 0; i <= 9; i++)
-    {
-        std::string std_img_file = std::string(img_dir) + "standard/20x40/" + IntToString(i) + ".jpg";
-        Mat std_img = imread(std_img_file.c_str());
-
-        fvec.AddSampleDepthVectorLeft(std_img, StdCharVectorsLeft[i]);
-        fvec.AddSampleDepthVectorRight(std_img, StdCharVectorsRight[i]);
-        fvec.AddSampleDepthVectorUp(std_img, StdCharVectorsUp[i]);
-        fvec.AddSampleDepthVectorDown(std_img, StdCharVectorsDown[i]);
-    }
-
-    for (int i = 10; i < 36; i++)
-    {
-        char ch = 'A' + i - 10;
-
-        if (ch == 'O' || ch == 'I')
-        {
-            continue;
-        }
-
-        std::string std_img_file = std::string(img_dir) + "standard/20x40/" + ch + ".jpg";
-        Mat std_img = imread(std_img_file.c_str());
-
-        fvec.AddSampleDepthVectorLeft(std_img, StdCharVectorsLeft[i]);
-        fvec.AddSampleDepthVectorRight(std_img, StdCharVectorsRight[i]);
-        fvec.AddSampleDepthVectorUp(std_img, StdCharVectorsUp[i]);
-        fvec.AddSampleDepthVectorDown(std_img, StdCharVectorsDown[i]);
-    }
+//    for (int i = 0; i <= 9; i++)
+//    {
+//        std::string std_img_file = std::string(img_dir) + "standard/20x40/" + IntToString(i) + ".jpg";
+//        Mat std_img = imread(std_img_file.c_str());
+//
+//        fvec.AddSampleDepthVectorLeft(std_img, StdCharVectorsLeft[i]);
+//        fvec.AddSampleDepthVectorRight(std_img, StdCharVectorsRight[i]);
+//        fvec.AddSampleDepthVectorUp(std_img, StdCharVectorsUp[i]);
+//        fvec.AddSampleDepthVectorDown(std_img, StdCharVectorsDown[i]);
+//    }
+//
+//    for (int i = 10; i < 36; i++)
+//    {
+//        char ch = 'A' + i - 10;
+//
+//        if (ch == 'O' || ch == 'I')
+//        {
+//            continue;
+//        }
+//
+//        std::string std_img_file = std::string(img_dir) + "standard/20x40/" + ch + ".jpg";
+//        Mat std_img = imread(std_img_file.c_str());
+//
+//        fvec.AddSampleDepthVectorLeft(std_img, StdCharVectorsLeft[i]);
+//        fvec.AddSampleDepthVectorRight(std_img, StdCharVectorsRight[i]);
+//        fvec.AddSampleDepthVectorUp(std_img, StdCharVectorsUp[i]);
+//        fvec.AddSampleDepthVectorDown(std_img, StdCharVectorsDown[i]);
+//    }
 }
 
 std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
@@ -48,6 +48,9 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
 
     for (int i = 0; i < 36; i++)
     {
+        if (i == 18 || i == 24)
+            continue;
+
         double cos_value_left = GetCos::GetVectorCos(mat_vec_left, StdCharVectorsLeft[i]);
         double cos_value_right = GetCos::GetVectorCos(mat_vec_right, StdCharVectorsRight[i]);
         double cos_value_up = GetCos::GetVectorCos(mat_vec_up, StdCharVectorsUp[i]);

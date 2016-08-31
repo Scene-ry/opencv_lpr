@@ -51,9 +51,9 @@
 		<Unit filename="include/recog/FeatureVectorHelper.cpp" />
 		<Unit filename="include/recog/FeatureVectorHelper.h" />
 		<Unit filename="include/recog/GetCos.hpp" />
-		<Unit filename="include/recog/GetPearson.hpp" />
 		<Unit filename="include/recog/JudgeChar.cpp" />
 		<Unit filename="include/recog/JudgeChar.h" />
+		<Unit filename="include/resource/stddata.h" />
 		<Unit filename="include/thin/Thin.cpp" />
 		<Unit filename="include/thin/Thin.h" />
 		<Unit filename="main.cpp" />
