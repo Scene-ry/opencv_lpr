@@ -9,11 +9,11 @@
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai2";
+    const char* filename = "chepai1";
 
     PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
+    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", true);
     //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)
@@ -36,7 +36,8 @@ int main()
         std::cout << "Reading cropped image " << i << "..." << std::endl;
 
         // begin recognition
-        std::string possible_chars = jc.GetPossibleChars(char_mat);
+        char recommend;
+        std::string possible_chars = jc.GetPossibleChars(char_mat, recommend);
         char recog = '\0';
 
         // when met some hard-recognized chars
@@ -58,6 +59,10 @@ int main()
         if (recog != '\0')
         {
             std::cout << std::endl << "Recognized as: " << recog;
+        }
+        else if (recommend != '\0')
+        {
+            std::cout << std::endl << "Recommend: " << recommend;
         }
 
         std::cout << std::endl << std::endl;

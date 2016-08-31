@@ -32,7 +32,7 @@ JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
     }
 }
 
-std::string JudgeChar::GetPossibleChars(const Mat& mat)
+std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
 {
     std::string res;
     std::map<char, double> char_cos_values;
@@ -42,6 +42,9 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat)
     fvec.AddSampleDepthVectorRight(mat, mat_vec_right);
     fvec.AddSampleDepthVectorUp(mat, mat_vec_up);
     fvec.AddSampleDepthVectorDown(mat, mat_vec_down);
+
+    double max_cos_value = 0;
+    recommend = '\0';
 
     for (int i = 0; i < 36; i++)
     {
@@ -54,12 +57,22 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat)
         if (i >= 0 && i <= 9)
         {
             char_cos_values.insert(std::make_pair('0' + i, cos_value));
+            if (cos_value > max_cos_value)
+            {
+                recommend = '0' + i;
+                max_cos_value = cos_value;
+            }
             if (cos_value >= SIMILAR_THRESHOLD)
                 res.append(1, '0' + i);
         }
         else
         {
             char_cos_values.insert(std::make_pair('A' + i - 10, cos_value));
+            if (cos_value > max_cos_value)
+            {
+                recommend = 'A' + i - 10;
+                max_cos_value = cos_value;
+            }
             if (cos_value >= SIMILAR_THRESHOLD)
                 res.append(1, 'A' + i - 10);
         }

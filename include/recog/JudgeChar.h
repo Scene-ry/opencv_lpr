@@ -18,7 +18,7 @@ public:
     std::vector<double> StdCharVectorsUp[36];
     std::vector<double> StdCharVectorsDown[36];
     JudgeChar(const char*);
-    std::string GetPossibleChars(const Mat&);
+    std::string GetPossibleChars(const Mat&, char&);
 
 private:
     FeatureVectorHelper fvec;

@@ -52,12 +52,12 @@ static char Distinguish_2_Z(const Mat& mat)
     {
         for (int h = 0; h < height; h++)
         {
-            int pixel = (int)mat.at<uchar>(h, w);
+            int pixel = (int)mat.at<uchar>(h, w * 3);
             if (pixel >= WHITE_THRESHOLD)
             {
-                if (last_h != -1 && h - last_h > 0.0001)
+                if (last_h != -1)
                 {
-                    double k = (w - last_w) / (double)(h - last_h);
+                    double k = (h - last_h) / (double)(w - last_w);
                     if (last_slope_exist)
                     {
                         slope_diff_sum += std::fabs(k - last_slope);
@@ -67,12 +67,13 @@ static char Distinguish_2_Z(const Mat& mat)
                 }
                 last_h = h;
                 last_w = w;
+                break;
             }
         }
     }
 
-    std::cout << slope_diff_sum << std::endl;
-    if (slope_diff_sum < 0.05)
+    //std::cout << slope_diff_sum << std::endl;
+    if (slope_diff_sum < 3)
         return 'Z';
 
     return '2';
