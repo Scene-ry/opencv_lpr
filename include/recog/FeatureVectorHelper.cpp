@@ -16,7 +16,7 @@ void FeatureVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<d
         {
             if ((int)mat.at<uchar>(h, w * 3) >= WHITE_THRESHOLD)
             {
-                result.push_back(w);
+                result.push_back(w + 1);
                 isPushed = true;
                 break;
             }
@@ -40,7 +40,7 @@ void FeatureVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<
         {
             if ((int)mat.at<uchar>(h, w * 3) >= WHITE_THRESHOLD)
             {
-                result.push_back(width - w - 1);
+                result.push_back(width - w);
                 isPushed = true;
                 break;
             }
@@ -64,7 +64,7 @@ void FeatureVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<dou
         {
             if ((int)mat.at<uchar>(h, w * 3) >= WHITE_THRESHOLD)
             {
-                result.push_back(h);
+                result.push_back(h + 1);
                 isPushed = true;
                 break;
             }
@@ -88,7 +88,7 @@ void FeatureVectorHelper::AddSampleDepthVectorDown(const Mat& mat, std::vector<d
         {
             if ((int)mat.at<uchar>(h, w * 3) >= WHITE_THRESHOLD)
             {
-                result.push_back(height - h - 1);
+                result.push_back(height - h);
                 isPushed = true;
                 break;
             }
