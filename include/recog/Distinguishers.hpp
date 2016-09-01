@@ -17,7 +17,7 @@ static char Distinguish_0_8_B_Q(const Mat& mat)
         last_pixel = 0;
         for (int h = 0; h < height; h++)
         {
-            int pixel = (int)mat.at<uchar>(h, w * 3);
+            int pixel = (int)mat.at<uchar>(h, w);
             if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
             {
                 white_area_count++;
@@ -37,7 +37,7 @@ static char Distinguish_0_8_B_Q(const Mat& mat)
             {
                 for (int w2 = 0; w2 < width; w2++)
                 {
-                    int pixel = (int)mat.at<uchar>(h2, w2 * 3);
+                    int pixel = (int)mat.at<uchar>(h2, w2);
                     if (pixel >= WHITE_THRESHOLD)
                     {
                         if (last_h != -1)
@@ -85,7 +85,7 @@ static char Distinguish_2_Z(const Mat& mat)
     {
         for (int h = 0; h < height; h++)
         {
-            int pixel = (int)mat.at<uchar>(h, w * 3);
+            int pixel = (int)mat.at<uchar>(h, w);
             if (pixel >= WHITE_THRESHOLD)
             {
                 if (last_h != -1)
@@ -119,7 +119,7 @@ static char Distinguish_E_F_H_L_T(const Mat& mat)
     // find 'T'
     for (int w = 0; w < width; w++)
     {
-        int pixel = (int)mat.at<uchar>(height / 2, w * 3);
+        int pixel = (int)mat.at<uchar>(height / 2, w);
         if (pixel >= WHITE_THRESHOLD)
         {
             if (std::fabs(width / 2 - w) < 5)
@@ -132,7 +132,7 @@ static char Distinguish_E_F_H_L_T(const Mat& mat)
     // find 'H'
     for (int h = 0; h < height; h++)
     {
-        int pixel = (int)mat.at<uchar>(h, (width / 2) * 3);
+        int pixel = (int)mat.at<uchar>(h, (width / 2));
         if (pixel >= WHITE_THRESHOLD)
         {
             if (std::fabs(height / 2 - h) < 5)
@@ -151,7 +151,7 @@ static char Distinguish_E_F_H_L_T(const Mat& mat)
         last_pixel = 0;
         for (int h = 0; h < height; h++)
         {
-            int pixel = (int)mat.at<uchar>(h, w * 3);
+            int pixel = (int)mat.at<uchar>(h, w);
             if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
             {
                 white_area_count++;
@@ -168,7 +168,7 @@ static char Distinguish_E_F_H_L_T(const Mat& mat)
     // find 'F'
     for (int h = 0; h < height; h++)
     {
-        int pixel = (int)mat.at<uchar>(h, (width / 2) * 3);
+        int pixel = (int)mat.at<uchar>(h, (width / 2));
         if (pixel >= WHITE_THRESHOLD)
         {
             if (h < 5)
@@ -188,7 +188,7 @@ static char Distinguish_7_J(const Mat& mat)
     // find '7'
     for (int w = 0; w < width; w++)
     {
-        int pixel = (int)mat.at<uchar>(height / 2, w * 3);
+        int pixel = (int)mat.at<uchar>(height / 2, w);
         if (pixel >= WHITE_THRESHOLD)
         {
             if (std::fabs(width / 2 - w) < 5)

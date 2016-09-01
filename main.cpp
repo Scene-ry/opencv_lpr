@@ -4,16 +4,16 @@
 #include "include/recog/Distinguishers.hpp"
 
 #define CHAR_MAX_WIDTH  1
-#define CHAR_MAX_HEIGHT 20
+#define CHAR_MAX_HEIGHT 40
 
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai3";
+    const char* filename = "chepai4";
 
     PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".png", false);
+    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)
@@ -28,7 +28,7 @@ int main()
     for (int i = 0; true; i++)
     {
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i) + ".jpg";
-        Mat char_mat = imread(s_filename);
+        Mat char_mat = imread(s_filename, 0);
 
         if (!char_mat.data)
             break;

@@ -18,20 +18,23 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     //namedWindow("original", CV_WINDOW_AUTOSIZE);
     //namedWindow("thinned", CV_WINDOW_AUTOSIZE);
 
+    // convert to 1-channel
+    Mat src_onechannel = Mat::zeros(src.size(), CV_8UC1);
+
     // convert to gray
-    cvtColor(src, src, CV_BGR2GRAY);
+    cvtColor(src, src_onechannel, CV_BGR2GRAY);
 
     // binarize
-    threshold(src, src, 125, 255, CV_THRESH_BINARY);
+    threshold(src_onechannel, src_onechannel, 125, 255, CV_THRESH_BINARY);
 
     // reverse if needed
     if (toReverse)
-        bitwise_not(src, src);
+        bitwise_not(src_onechannel, src_onechannel);
 
     // dilate
-    Mat src_dilate;// = src.clone();
+    Mat src_dilate;// = src_onechannel.clone();
     Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
-    dilate(src, src_dilate, kernel);
+    dilate(src_onechannel, src_dilate, kernel);
     //erode(tmp, tmp, 0);
 
     // thinning
@@ -99,6 +102,8 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
         imwrite(s_filename.c_str(), tmp_resize);
+
+        std::cout << tmp_resize.channels() << std::endl;
 
         //rectangle(src_thin, r, Scalar(125), 1);
     }
