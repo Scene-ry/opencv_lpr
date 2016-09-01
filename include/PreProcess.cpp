@@ -1,8 +1,8 @@
 #include "PreProcess.h"
 
-//PreProcess::PreProcess(int w, int h) : char_max_width(w), char_max_height(h)
-//{
-//}
+PreProcess::PreProcess(int th) : bin_threshold(th)
+{
+}
 
 void AddBlackEdge(const Mat& src, Mat& dst)
 {
@@ -41,31 +41,35 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     cvtColor(src, src_onechannel, CV_BGR2GRAY);
 
     // binarize
-    threshold(src_onechannel, src_onechannel, 125, 255, CV_THRESH_BINARY);
+    threshold(src_onechannel, src_onechannel, bin_threshold, 255, CV_THRESH_BINARY);
 
     // reverse if needed
     if (toReverse)
         bitwise_not(src_onechannel, src_onechannel);
 
+    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", src_onechannel);
+
     // crop
     Mat src_crop;
     LicenseCropper(src_onechannel, src_crop);
+    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_crop.jpg", src_crop);
 
     // dilate
-    Mat src_dilate;
+    Mat src_dilate;// = src_crop.clone();
     Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
     dilate(src_crop, src_dilate, kernel);
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", src_dilate);
+    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_dilate.jpg", src_dilate);
     //erode(tmp, tmp, 0);
 
     // add edge
     Mat src_dilate_addedge;
     AddBlackEdge(src_dilate, src_dilate_addedge);
+    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", src_dilate_addedge);
 
     // thinning
     Mat src_thin;
     thinner.Thinning_2(src_dilate_addedge, src_thin);
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", src_thin);
+    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_thin.jpg", src_thin);
 
     // crop
     //Mat src_thin_crop;
@@ -85,7 +89,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     {
         Rect r = boundingRect(*it);
         // only store large contours
-        if (r.width > char_max_width && r.height > char_max_height)
+        if (r.width >= char_max_width && r.height >= char_max_height)
         {
             rects.push_back(r);
         }

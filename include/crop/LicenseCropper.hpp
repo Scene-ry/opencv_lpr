@@ -25,14 +25,28 @@ static void LicenseCropper(const Mat& src, Mat& dst)
             last_pixel = pixel;
         }
 
-        if (white_area_count > 2 && h_start == 0)
+        if (white_area_count > 5 && h_start == 0)
         {
             h_start = h;
         }
-        if (white_area_count <= 2 && h_start != 0)
+    }
+    for (int h = height - 1; h >= 0; h--)
+    {
+        white_area_count = 0;
+        last_pixel = 0;
+        for (int w = 0; w < width; w++)
         {
-            h_end = h;
-            break;
+            int pixel = (int)src.at<uchar>(h, w);
+            if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
+            {
+                white_area_count++;
+            }
+            last_pixel = pixel;
+        }
+
+        if (white_area_count > 5 && h_end == height)
+        {
+            h_end = h + 1;
         }
     }
 

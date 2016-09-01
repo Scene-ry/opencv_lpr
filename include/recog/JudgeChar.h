@@ -2,13 +2,13 @@
 #define JUDGECHAR_H
 
 #include "GetCos.hpp"
-#include "FeatureVectorHelper.h"
+#include "DepthVectorHelper.h"
 #include "../Common.h"
 
 #ifdef __GET_EDGE_DATA__
-#include "../resource/stddata_dim11.h"
+#include "../resource/std_depth_data_with_edge.h"
 #else
-#include "../resource/stddata_dim9.h"
+#include "../resource/std_depth_data.h"
 #endif
 
 #include <map>
@@ -27,7 +27,7 @@ public:
     std::string GetPossibleChars(const Mat&, char&);
 
 private:
-    FeatureVectorHelper fvec;
+    DepthVectorHelper fvec;
 };
 
 #endif // JUDGECHAR_H

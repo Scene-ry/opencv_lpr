@@ -1,5 +1,5 @@
-#ifndef ZEROQDISTINGUISHER_HPP
-#define ZEROQDISTINGUISHER_HPP
+#ifndef DISTINGUISHERS_HPP
+#define DISTINGUISHERS_HPP
 
 #include "../Common.h"
 
@@ -33,7 +33,8 @@ static char Distinguish_0_8_B_D_Q(const Mat& mat)
             double slope_diff_sum = 0;
             bool last_slope_exist = false;
 
-            for (int h2 = 0; h2 < height; h2++)
+            int h2_incr = height / 10;
+            for (int h2 = h2_incr; h2 < height; h2 += h2_incr)
             {
                 for (int w2 = 0; w2 < width; w2++)
                 {
@@ -76,7 +77,9 @@ static char Distinguish_0_8_B_D_Q(const Mat& mat)
     double last_slope;
     double slope_diff_sum = 0;
     bool last_slope_exist = false;
-    for (int h = 0; h < height; h++)
+
+    int h_incr = height / 10;
+    for (int h = h_incr; h < height; h += h_incr)
     {
         for (int w = 0; w < width; w++)
         {
@@ -114,7 +117,8 @@ static char Distinguish_2_Z(const Mat& mat)
     double slope_diff_sum = 0;
     bool last_slope_exist = false;
 
-    for (int w = 0; w < width; w++)
+    int w_incr = width / SAMPLE_COUNT;
+    for (int w = w_incr; w < width; w += w_incr)
     {
         for (int h = 0; h < height; h++)
         {

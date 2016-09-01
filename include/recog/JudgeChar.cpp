@@ -38,10 +38,7 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
     std::map<char, double> char_cos_values;
 
     std::vector<double> mat_vec_left, mat_vec_right, mat_vec_up, mat_vec_down;
-    fvec.AddSampleDepthVectorLeft(mat, mat_vec_left);
-    fvec.AddSampleDepthVectorRight(mat, mat_vec_right);
-    fvec.AddSampleDepthVectorUp(mat, mat_vec_up);
-    fvec.AddSampleDepthVectorDown(mat, mat_vec_down);
+    fvec.AddSampleDepthVector(mat, mat_vec_left, mat_vec_right, mat_vec_up, mat_vec_down);
 
     double max_cos_value = 0;
     recommend = '\0';

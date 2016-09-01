@@ -9,9 +9,9 @@
 int main()
 {
     const char* img_dir = "./images/";
-    const char* filename = "chepai4";
+    const char* filename = "chepai6";
 
-    PreProcess pre/*(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT)*/;
+    PreProcess pre(200);
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;

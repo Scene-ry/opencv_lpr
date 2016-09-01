@@ -19,12 +19,12 @@ enum ProcessResult
 class PreProcess
 {
 public:
-    //PreProcess(int, int);
+    PreProcess(int);
     ProcessResult pre_process(const char*, const char*, const char*, bool);
 
 private:
     Thin thinner;
-    int char_max_width, char_max_height;
+    int bin_threshold;
 };
 
 #endif // PREPROCESS_H

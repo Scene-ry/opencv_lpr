@@ -1,10 +1,18 @@
-#include "FeatureVectorHelper.h"
+#include "DepthVectorHelper.h"
 
-FeatureVectorHelper::FeatureVectorHelper(int w, int h) : width(w), height(h)
+DepthVectorHelper::DepthVectorHelper(int w, int h) : width(w), height(h)
 {
 }
 
-void FeatureVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVector(const Mat& mat, std::vector<double>& vec_left, std::vector<double>& vec_right, std::vector<double>& vec_up, std::vector<double>& vec_down)
+{
+    AddSampleDepthVectorLeft(mat, vec_left);
+    AddSampleDepthVectorRight(mat, vec_right);
+    AddSampleDepthVectorUp(mat, vec_up);
+    AddSampleDepthVectorDown(mat, vec_down);
+}
+
+void DepthVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<double>& result)
 {
     int h_incr = height / SAMPLE_COUNT;
     bool isPushed;
@@ -36,7 +44,7 @@ void FeatureVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<d
     }
 }
 
-void FeatureVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<double>& result)
 {
     int h_incr = height / SAMPLE_COUNT;
     bool isPushed;
@@ -68,7 +76,7 @@ void FeatureVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<
     }
 }
 
-void FeatureVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<double>& result)
 {
     int w_incr = width / SAMPLE_COUNT;
     bool isPushed;
@@ -100,7 +108,7 @@ void FeatureVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<dou
     }
 }
 
-void FeatureVectorHelper::AddSampleDepthVectorDown(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorDown(const Mat& mat, std::vector<double>& result)
 {
     int w_incr = width / SAMPLE_COUNT;
     bool isPushed;
