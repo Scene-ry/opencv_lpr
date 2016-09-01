@@ -2,6 +2,7 @@
 #define PREPROCESS_H
 
 #include "thin/Thin.h"
+#include "crop/LicenseCropper.hpp"
 #include "Common.h"
 
 #include <algorithm>
@@ -18,7 +19,7 @@ enum ProcessResult
 class PreProcess
 {
 public:
-    PreProcess(int, int);
+    //PreProcess(int, int);
     ProcessResult pre_process(const char*, const char*, const char*, bool);
 
 private:

@@ -3,7 +3,7 @@
 
 #include "../Common.h"
 
-static char Distinguish_0_8_B_Q(const Mat& mat)
+static char Distinguish_0_8_B_D_Q(const Mat& mat)
 {
     int width = mat.cols, height = mat.rows;
     int white_area_count;
@@ -70,6 +70,39 @@ static char Distinguish_0_8_B_Q(const Mat& mat)
     {
         return 'Q';
     }
+
+    // find 'D' and '0'
+    int last_h = -1, last_w = -1;
+    double last_slope;
+    double slope_diff_sum = 0;
+    bool last_slope_exist = false;
+    for (int h = 0; h < height; h++)
+    {
+        for (int w = 0; w < width; w++)
+        {
+            int pixel = (int)mat.at<uchar>(h, w);
+            if (pixel >= WHITE_THRESHOLD)
+            {
+                if (last_h != -1)
+                {
+                    double k = (h - last_h) / (double)(w - last_w);
+                    if (last_slope_exist)
+                    {
+                        slope_diff_sum += std::fabs(k - last_slope);
+                    }
+                    last_slope_exist = true;
+                    last_slope = k;
+                }
+                last_h = h;
+                last_w = w;
+                break;
+            }
+        }
+    }
+
+    //std::cout << slope_diff_sum << std::endl;
+    if (slope_diff_sum < 3)
+        return 'D';
     return '0';
 }
 

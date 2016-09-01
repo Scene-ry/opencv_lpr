@@ -14,6 +14,7 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-g" />
+					<Add option="-D__GET_EDGE_DATA__" />
 					<Add directory="include" />
 					<Add directory="include/thin" />
 					<Add directory="include/recog" />
@@ -47,13 +48,15 @@
 		<Unit filename="include/Common.h" />
 		<Unit filename="include/PreProcess.cpp" />
 		<Unit filename="include/PreProcess.h" />
+		<Unit filename="include/crop/LicenseCropper.hpp" />
 		<Unit filename="include/recog/Distinguishers.hpp" />
 		<Unit filename="include/recog/FeatureVectorHelper.cpp" />
 		<Unit filename="include/recog/FeatureVectorHelper.h" />
 		<Unit filename="include/recog/GetCos.hpp" />
 		<Unit filename="include/recog/JudgeChar.cpp" />
 		<Unit filename="include/recog/JudgeChar.h" />
-		<Unit filename="include/resource/stddata.h" />
+		<Unit filename="include/resource/stddata_dim11.h" />
+		<Unit filename="include/resource/stddata_dim9.h" />
 		<Unit filename="include/thin/Thin.cpp" />
 		<Unit filename="include/thin/Thin.h" />
 		<Unit filename="main.cpp" />

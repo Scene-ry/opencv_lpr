@@ -9,8 +9,16 @@ void FeatureVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<d
     int h_incr = height / SAMPLE_COUNT;
     bool isPushed;
 
+#ifdef __GET_EDGE_DATA__
+    for (int h = 0; h <= height; h += h_incr)
+    {
+        if (h >= height)
+            h = height - 1;
+#else
     for (int h = h_incr; h < height; h += h_incr)
     {
+#endif // __GET_EDGE_DATA__
+
         isPushed = false;
         for (int w = 0; w < width; w++)
         {
@@ -33,8 +41,16 @@ void FeatureVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<
     int h_incr = height / SAMPLE_COUNT;
     bool isPushed;
 
+#ifdef __GET_EDGE_DATA__
+    for (int h = 0; h <= height; h += h_incr)
+    {
+        if (h >= height)
+            h = height - 1;
+#else
     for (int h = h_incr; h < height; h += h_incr)
     {
+#endif // __GET_EDGE_DATA__
+
         isPushed = false;
         for (int w = width - 1; w >= 0; w--)
         {
@@ -57,8 +73,16 @@ void FeatureVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<dou
     int w_incr = width / SAMPLE_COUNT;
     bool isPushed;
 
+#ifdef __GET_EDGE_DATA__
+    for (int w = 0; w <= width; w += w_incr)
+    {
+        if (w >= width)
+            w = width - 1;
+#else
     for (int w = w_incr; w < width; w += w_incr)
     {
+#endif // __GET_EDGE_DATA__
+
         isPushed = false;
         for (int h = 0; h < height; h++)
         {
@@ -81,8 +105,16 @@ void FeatureVectorHelper::AddSampleDepthVectorDown(const Mat& mat, std::vector<d
     int w_incr = width / SAMPLE_COUNT;
     bool isPushed;
 
+#ifdef __GET_EDGE_DATA__
+    for (int w = 0; w <= width; w += w_incr)
+    {
+        if (w >= width)
+            w = width - 1;
+#else
     for (int w = w_incr; w < width; w += w_incr)
     {
+#endif // __GET_EDGE_DATA__
+
         isPushed = false;
         for (int h = height - 1; h >= 0; h--)
         {

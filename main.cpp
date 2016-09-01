@@ -3,15 +3,15 @@
 #include "include/recog/GetCos.hpp"
 #include "include/recog/Distinguishers.hpp"
 
-#define CHAR_MAX_WIDTH  1
-#define CHAR_MAX_HEIGHT 40
+//#define CHAR_MAX_WIDTH  1
+//#define CHAR_MAX_HEIGHT 20
 
 int main()
 {
     const char* img_dir = "./images/";
     const char* filename = "chepai4";
 
-    PreProcess pre(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT);
+    PreProcess pre/*(CHAR_MAX_WIDTH, CHAR_MAX_HEIGHT)*/;
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
@@ -23,6 +23,12 @@ int main()
     }
 
     std::cout << std::endl;
+
+#ifdef __GET_EDGE_DATA__
+    std::cout << "Edge data included." << std::endl;
+#else
+    std::cout << "Edge data not included." << std::endl;
+#endif // __GET_EDGE_DATA__
 
     JudgeChar jc(img_dir);
     for (int i = 0; true; i++)
@@ -38,14 +44,13 @@ int main()
         // begin recognition
         char recommend;
         std::string possible_chars = jc.GetPossibleChars(char_mat, recommend);
-        char recog = '\0';
 
         // when met some hard-recognized chars
-
+        char recog = '\0';
         //if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
-        if (recommend == '0' || recommend == '8' || recommend == 'B' || recommend == 'Q')
+        if (recommend == '0' || recommend == '8' || recommend == 'B' || recommend == 'D' || recommend == 'Q')
         {
-            recog = Distinguish_0_8_B_Q(char_mat);
+            recog = Distinguish_0_8_B_D_Q(char_mat);
         }
         //else if (possible_chars.find('2') != std::string::npos || possible_chars.find('Z') != std::string::npos)
         else if (recommend == '2' || recommend == 'Z')
@@ -57,14 +62,14 @@ int main()
         //    possible_chars.find('H') != std::string::npos ||
         //    possible_chars.find('L') != std::string::npos ||
         //    possible_chars.find('T') != std::string::npos)
-        else if (recommend == 'E' || recommend == 'F' || recommend == 'H' || recommend == 'L' || recommend == 'T')
-        {
-            recog = Distinguish_E_F_H_L_T(char_mat);
-        }
-        else if (recommend == '7' || recommend == 'J')
-        {
-            recog = Distinguish_7_J(char_mat);
-        }
+//        else if (recommend == 'E' || recommend == 'F' || recommend == 'H' || recommend == 'L' || recommend == 'T')
+//        {
+//            recog = Distinguish_E_F_H_L_T(char_mat);
+//        }
+//        else if (recommend == '7' || recommend == 'J')
+//        {
+//            recog = Distinguish_7_J(char_mat);
+//        }
 
         std::cout << "Possible chars: ";
         for (int i = 0; i < possible_chars.size(); i++)

@@ -4,7 +4,12 @@
 #include "GetCos.hpp"
 #include "FeatureVectorHelper.h"
 #include "../Common.h"
-#include "../resource/stddata.h"
+
+#ifdef __GET_EDGE_DATA__
+#include "../resource/stddata_dim11.h"
+#else
+#include "../resource/stddata_dim9.h"
+#endif
 
 #include <map>
 #include <vector>
