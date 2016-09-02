@@ -8,10 +8,22 @@
 
 int main()
 {
-    const char* img_dir = "./images/";
-    const char* filename = "chepai6";
 
-    PreProcess pre(200);
+
+#ifdef __GET_STD_CHAR_IMAGE__
+    PreProcess pre;   // binary threshold set to 200
+    const char* img_dir = "./images/standard/chars/";
+    for (int i = 0; i < 34; i++)
+    {
+        ProcessResult result = pre.pre_process(img_dir, IntToString(i).c_str(), ".bmp", false);
+        if (result != ProcessResult::Success)
+            break;
+    }
+
+#else
+    PreProcess pre;   // binary threshold set to 200
+    const char* img_dir = "./images/";
+    const char* filename = "chepai7";
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
@@ -88,6 +100,7 @@ int main()
 
         std::cout << std::endl << std::endl;
     }
+#endif // __GET_STD_CHAR_IMAGE__
 
     return 0;
 }

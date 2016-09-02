@@ -19,7 +19,7 @@ enum ProcessResult
 class PreProcess
 {
 public:
-    PreProcess(int);
+    PreProcess();
     ProcessResult pre_process(const char*, const char*, const char*, bool);
 
 private:

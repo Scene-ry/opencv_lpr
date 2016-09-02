@@ -1,24 +1,99 @@
 #include "PreProcess.h"
 
-PreProcess::PreProcess(int th) : bin_threshold(th)
+PreProcess::PreProcess()
 {
 }
 
-void AddBlackEdge(const Mat& src, Mat& dst)
+//void AddBlackEdge(const Mat& src, Mat& dst)
+//{
+//    int width = src.cols;
+//    int height = src.rows;
+//
+//    dst = Mat::zeros(height + 2, width + 2, CV_8UC1);
+//
+//    for (int h = 0; h < height; h++)
+//    {
+//        for (int w = 0; w < width; w++)
+//        {
+//            dst.at<uchar>(h + 1, w + 1) = src.at<uchar>(h, w);
+//        }
+//    }
+//}
+
+void binarize_by_average(const Mat& src, Mat& dst)
 {
-    int width = src.cols;
-    int height = src.rows;
-
-    dst = Mat::zeros(height + 2, width + 2, CV_8UC1);
-
-    for (int h = 0; h < height; h++)
+    // find the proper binarize threshold
+    int threshold_max = 0;
+    int threshold_min = 255;
+    for (int h = 0; h < src.rows; h++)
     {
-        for (int w = 0; w < width; w++)
+        for (int w = 0; w < src.cols; w++)
         {
-            dst.at<uchar>(h + 1, w + 1) = src.at<uchar>(h, w);
+            int pixel = (int)src.at<uchar>(h, w);
+            if (pixel < threshold_min)
+                threshold_min = pixel;
+            if (pixel > threshold_max)
+                threshold_max = pixel;
         }
     }
+    int bin_threshold = (threshold_min + threshold_max) / 2;
+
+    threshold(src, dst, bin_threshold, 255, CV_THRESH_BINARY);
 }
+
+void binarize_by_histogram(const Mat& src, Mat& dst)
+{
+    int hist[256] = {0};
+    int hist_gram[256][256];
+
+    for (int row = 0; row < 256; row++)
+    {
+        for (int col = 0; col < 256; col++)
+        {
+            hist_gram[row][col] = 0;
+        }
+    }
+
+    for (int h = 0; h < src.rows; h++)
+    {
+        for (int w = 0; w < src.cols; w++)
+        {
+            int pixel = (int)src.at<uchar>(h, w);
+            hist[pixel]++;
+        }
+    }
+
+    for (int i = 0; i < 256; i++)
+    {
+        std::cout << hist[i] << " ";
+    }
+    std::cout << "\n\n";
+
+    for (int i = 0; i < 256; i++)
+    {
+        for (int j = 0; j < hist[i]; j++)
+            hist_gram[i][j] = 1;
+    }
+
+    std::cout << "-------------------------------------------------\n";
+
+    for (int row = 0; row < 256; row++)
+    {
+        for (int col = 0; col < 256; col++)
+        {
+            if (hist_gram[row][col] == 1)
+            {
+                std::cout << "-";
+                continue;
+            }
+            break;
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "-------------------------------------------------\n";
+}
+
 
 ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename, const char* extname, bool toReverse)
 {
@@ -39,6 +114,27 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
     // convert to gray
     cvtColor(src, src_onechannel, CV_BGR2GRAY);
+    imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/gray.jpg", src_onechannel);
+
+#ifdef __GET_STD_CHAR_IMAGE__
+    int bin_threshold = 140;
+#else
+    // find the proper binarize threshold
+    int threshold_max = 0;
+    int threshold_min = 255;
+    for (int h = 0; h < src_onechannel.rows; h++)
+    {
+        for (int w = 0; w < src_onechannel.cols; w++)
+        {
+            int pixel = (int)src_onechannel.at<uchar>(h, w);
+            if (pixel < threshold_min)
+                threshold_min = pixel;
+            if (pixel > threshold_max)
+                threshold_max = pixel;
+        }
+    }
+    int bin_threshold = (threshold_min + threshold_max) / 2;
+#endif
 
     // binarize
     threshold(src_onechannel, src_onechannel, bin_threshold, 255, CV_THRESH_BINARY);
@@ -47,28 +143,38 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     if (toReverse)
         bitwise_not(src_onechannel, src_onechannel);
 
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", src_onechannel);
+    imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
 
+#ifdef __GET_STD_CHAR_IMAGE__
+    std::string std_filename = std::string(img_dir) + "crops/" + filename + ".jpg";
+    imwrite(std_filename.c_str(), src_onechannel);
+    return ProcessResult::Success;
+#endif
     // crop
     Mat src_crop;
     LicenseCropper(src_onechannel, src_crop);
     //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_crop.jpg", src_crop);
 
     // dilate
-    Mat src_dilate;// = src_crop.clone();
-    Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
-    dilate(src_crop, src_dilate, kernel);
+    //Mat src_dilate;// = src_crop.clone();
+    //Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+    //dilate(src_crop, src_dilate, kernel);
     //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_dilate.jpg", src_dilate);
     //erode(tmp, tmp, 0);
 
+
     // add edge
-    Mat src_dilate_addedge;
-    AddBlackEdge(src_dilate, src_dilate_addedge);
+    //Mat src_dilate_addedge;
+    //AddBlackEdge(src_dilate, src_dilate_addedge);
     //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", src_dilate_addedge);
 
-    // thinning
-    Mat src_thin;
-    thinner.Thinning_2(src_dilate_addedge, src_thin);
+    // thinning-1
+    //Mat src_thin = src_dilate_addedge.clone();
+    //thinner.Thinning_1(src_thin);
+
+    // thinning-2
+    //Mat src_thin;
+    //thinner.Thinning_2(src_dilate_addedge, src_thin);
     //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_thin.jpg", src_thin);
 
     // crop
@@ -78,9 +184,9 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 
     // get the contours
     int char_max_width = 1;
-    int char_max_height = src_thin.rows / 2;
+    int char_max_height = src_crop.rows / 2;
     std::vector<std::vector<Point> > contours;
-    findContours(src_thin.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
     std::cout << "Count of contours: " << contours.size() << std::endl;
 
@@ -114,7 +220,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
         rg_col.start = r.x;
         rg_col.end = r.x + r.width;
 
-        Mat tmp(src_thin, rg_row, rg_col);
+        Mat tmp(src_crop, rg_row, rg_col);
 
         Mat tmp_resize;
         if (tmp.cols < 5)
@@ -138,7 +244,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
         threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
 
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
-        imwrite(s_filename.c_str(), tmp_resize);
+        //imwrite(s_filename.c_str(), tmp_resize);
 
         //std::cout << tmp_resize.channels() << std::endl;
 
