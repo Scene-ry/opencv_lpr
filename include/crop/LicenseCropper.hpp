@@ -28,6 +28,7 @@ static void LicenseCropper(const Mat& src, Mat& dst)
         if (white_area_count > 5 && h_start == 0)
         {
             h_start = h;
+            break;
         }
     }
     for (int h = height - 1; h >= 0; h--)
@@ -47,6 +48,9 @@ static void LicenseCropper(const Mat& src, Mat& dst)
         if (white_area_count > 5 && h_end == height)
         {
             h_end = h + 1;
+            if (h_end > height)
+                h_end = height;
+            break;
         }
     }
 

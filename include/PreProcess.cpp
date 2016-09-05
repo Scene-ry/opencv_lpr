@@ -4,55 +4,36 @@ PreProcess::PreProcess()
 {
 }
 
-//void AddBlackEdge(const Mat& src, Mat& dst)
-//{
-//    int width = src.cols;
-//    int height = src.rows;
-//
-//    dst = Mat::zeros(height + 2, width + 2, CV_8UC1);
-//
-//    for (int h = 0; h < height; h++)
-//    {
-//        for (int w = 0; w < width; w++)
-//        {
-//            dst.at<uchar>(h + 1, w + 1) = src.at<uchar>(h, w);
-//        }
-//    }
-//}
-
-void binarize_by_average(const Mat& src, Mat& dst)
+void AddBlackEdge(const Mat& src, Mat& dst)
 {
-    // find the proper binarize threshold
-    int threshold_max = 0;
-    int threshold_min = 255;
-    for (int h = 0; h < src.rows; h++)
+    int width = src.cols;
+    int height = src.rows;
+
+    dst = Mat::zeros(height + 2, width + 2, CV_8UC1);
+
+    for (int h = 0; h < height; h++)
     {
-        for (int w = 0; w < src.cols; w++)
+        for (int w = 0; w < width; w++)
         {
-            int pixel = (int)src.at<uchar>(h, w);
-            if (pixel < threshold_min)
-                threshold_min = pixel;
-            if (pixel > threshold_max)
-                threshold_max = pixel;
+            dst.at<uchar>(h + 1, w + 1) = src.at<uchar>(h, w);
         }
     }
-    int bin_threshold = (threshold_min + threshold_max) / 2;
-
-    threshold(src, dst, bin_threshold, 255, CV_THRESH_BINARY);
 }
 
-void binarize_by_histogram(const Mat& src, Mat& dst)
+int GetMeanThreshold(int* hist_gram)
+{
+    int sum = 0, amount = 0;
+    for (int i = 0; i <256; i++)
+    {
+        amount += hist_gram[i];
+        sum += i * hist_gram[i];
+    }
+    return sum / amount;
+}
+
+int binarize_by_histogram(const Mat& src)
 {
     int hist[256] = {0};
-    int hist_gram[256][256];
-
-    for (int row = 0; row < 256; row++)
-    {
-        for (int col = 0; col < 256; col++)
-        {
-            hist_gram[row][col] = 0;
-        }
-    }
 
     for (int h = 0; h < src.rows; h++)
     {
@@ -63,35 +44,7 @@ void binarize_by_histogram(const Mat& src, Mat& dst)
         }
     }
 
-    for (int i = 0; i < 256; i++)
-    {
-        std::cout << hist[i] << " ";
-    }
-    std::cout << "\n\n";
-
-    for (int i = 0; i < 256; i++)
-    {
-        for (int j = 0; j < hist[i]; j++)
-            hist_gram[i][j] = 1;
-    }
-
-    std::cout << "-------------------------------------------------\n";
-
-    for (int row = 0; row < 256; row++)
-    {
-        for (int col = 0; col < 256; col++)
-        {
-            if (hist_gram[row][col] == 1)
-            {
-                std::cout << "-";
-                continue;
-            }
-            break;
-        }
-        std::cout << "\n";
-    }
-
-    std::cout << "-------------------------------------------------\n";
+    return GetMeanThreshold(hist);
 }
 
 
@@ -119,21 +72,8 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 #ifdef __GET_STD_CHAR_IMAGE__
     int bin_threshold = 140;
 #else
-    // find the proper binarize threshold
-    int threshold_max = 0;
-    int threshold_min = 255;
-    for (int h = 0; h < src_onechannel.rows; h++)
-    {
-        for (int w = 0; w < src_onechannel.cols; w++)
-        {
-            int pixel = (int)src_onechannel.at<uchar>(h, w);
-            if (pixel < threshold_min)
-                threshold_min = pixel;
-            if (pixel > threshold_max)
-                threshold_max = pixel;
-        }
-    }
-    int bin_threshold = (threshold_min + threshold_max) / 2;
+    GaussianBlur(src_onechannel, src_onechannel, Size(3, 3), 0, 0);
+    int bin_threshold = binarize_by_histogram(src_onechannel);
 #endif
 
     // binarize
@@ -143,17 +83,74 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     if (toReverse)
         bitwise_not(src_onechannel, src_onechannel);
 
-    imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
+    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
 
 #ifdef __GET_STD_CHAR_IMAGE__
+    Mat src_onechannel_edge;
+    AddBlackEdge(src_onechannel, src_onechannel_edge);
+    int h_start = -1, h_end = -1, w_start = -1, w_end = -1;
+
+    for (int h = 0; h < src_onechannel_edge.rows; h++)
+    {
+        bool white_found = false;
+        for (int w = 0; w < src_onechannel_edge.cols; w++)
+        {
+            if (src_onechannel_edge.at<uchar>(h, w) >= WHITE_THRESHOLD)
+            {
+                white_found = true;
+                break;
+            }
+        }
+
+        if (white_found && h_start == -1)
+        {
+            h_start = h;
+        }
+        if (!white_found && h_start != -1 && h_end == -1)
+        {
+            h_end = h;
+        }
+    }
+
+    for (int w = 0; w < src_onechannel_edge.cols; w++)
+    {
+        bool white_found = false;
+        for (int h = 0; h < src_onechannel_edge.rows; h++)
+        {
+            if (src_onechannel_edge.at<uchar>(h, w) >= WHITE_THRESHOLD)
+            {
+                white_found = true;
+                break;
+            }
+        }
+
+        if (white_found && w_start == -1)
+        {
+            w_start = w;
+        }
+        if (!white_found && w_start != -1 && w_end == -1)
+        {
+            w_end = w;
+        }
+    }
+    Range rg_row, rg_col;
+    rg_row.start = h_start;
+    rg_row.end = h_end;
+    rg_col.start = w_start;
+    rg_col.end = w_end;
+
+    Mat cr = Mat(src_onechannel_edge, rg_row, rg_col);
+    Mat rs;
+    resize(cr, rs, Size(CROP_WIDTH, CROP_HEIGHT));
+
     std::string std_filename = std::string(img_dir) + "crops/" + filename + ".jpg";
-    imwrite(std_filename.c_str(), src_onechannel);
+    imwrite(std_filename.c_str(), rs);
     return ProcessResult::Success;
 #endif
     // crop
     Mat src_crop;
     LicenseCropper(src_onechannel, src_crop);
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_crop.jpg", src_crop);
+    imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_crop.jpg", src_crop);
 
     // dilate
     //Mat src_dilate;// = src_crop.clone();
@@ -244,7 +241,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
         threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
 
         std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
-        //imwrite(s_filename.c_str(), tmp_resize);
+        imwrite(s_filename.c_str(), tmp_resize);
 
         //std::cout << tmp_resize.channels() << std::endl;
 

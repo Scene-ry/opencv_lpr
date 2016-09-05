@@ -11,19 +11,19 @@ int main()
 
 
 #ifdef __GET_STD_CHAR_IMAGE__
-    PreProcess pre;   // binary threshold set to 200
+    PreProcess pre;   // binary threshold set to 140
     const char* img_dir = "./images/standard/chars/";
     for (int i = 0; i < 34; i++)
     {
-        ProcessResult result = pre.pre_process(img_dir, IntToString(i).c_str(), ".bmp", false);
+        ProcessResult result = pre.pre_process(img_dir, IntToString(i).c_str(), ".bmp", true);
         if (result != ProcessResult::Success)
             break;
     }
 
 #else
-    PreProcess pre;   // binary threshold set to 200
+    PreProcess pre;
     const char* img_dir = "./images/";
-    const char* filename = "chepai7";
+    const char* filename = "chepai2";
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;

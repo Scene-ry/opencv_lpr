@@ -14,7 +14,7 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-g" />
-					<Add option="-D__GET_EDGE_DATA__" />
+					<Add option="-D__NGET_EDGE_DATA__" />
 					<Add option="-D__NGET_STD_CHAR_IMAGE__" />
 					<Add directory="include" />
 					<Add directory="include/thin" />
