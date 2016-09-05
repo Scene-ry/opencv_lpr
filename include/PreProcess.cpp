@@ -75,6 +75,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     GaussianBlur(src_onechannel, src_onechannel, Size(3, 3), 0, 0);
     int bin_threshold = binarize_by_histogram(src_onechannel);
 #endif
+    std::cout << "Threshold: " << bin_threshold << std::endl;
 
     // binarize
     threshold(src_onechannel, src_onechannel, bin_threshold, 255, CV_THRESH_BINARY);
@@ -220,17 +221,11 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
         Mat tmp(src_crop, rg_row, rg_col);
 
         Mat tmp_resize;
-        if (tmp.cols < 5)
+        //std::cout << (tmp.rows / (double)tmp.cols) << std::endl;
+        if (tmp.rows / (double)tmp.cols > 2.5)
         {
             // deal with '1'
-            tmp_resize = Mat::zeros(CROP_HEIGHT, CROP_WIDTH, CV_8UC1);
-            for (int h = 0; h < CROP_HEIGHT; h++)
-            {
-                for (int w = 0; w < tmp.cols; w++)
-                {
-                    tmp_resize.at<uchar>(h, ((CROP_WIDTH - tmp.cols) / 2 + w)) = 255;
-                }
-            }
+            resize(tmp, tmp_resize, Size(1, 1));
         }
         else
         {

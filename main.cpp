@@ -8,8 +8,6 @@
 
 int main()
 {
-
-
 #ifdef __GET_STD_CHAR_IMAGE__
     PreProcess pre;   // binary threshold set to 140
     const char* img_dir = "./images/standard/chars/";
@@ -23,7 +21,7 @@ int main()
 #else
     PreProcess pre;
     const char* img_dir = "./images/";
-    const char* filename = "chepai2";
+    const char* filename = "chepai7";
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
     //ProcessResult result = ProcessResult::Success;
@@ -59,29 +57,6 @@ int main()
 
         // when met some hard-recognized chars
         char recog = '\0';
-        //if (possible_chars.find('0') != std::string::npos || possible_chars.find('8') != std::string::npos || possible_chars.find('Q') != std::string::npos)
-        if (recommend == '0' || recommend == '8' || recommend == 'B' || recommend == 'D' || recommend == 'Q')
-        {
-            recog = Distinguish_0_8_B_D_Q(char_mat);
-        }
-        //else if (possible_chars.find('2') != std::string::npos || possible_chars.find('Z') != std::string::npos)
-        else if (recommend == '2' || recommend == 'Z')
-        {
-            recog = Distinguish_2_Z(char_mat);
-        }
-        //else if (possible_chars.find('E') != std::string::npos ||
-        //    possible_chars.find('F') != std::string::npos ||
-        //    possible_chars.find('H') != std::string::npos ||
-        //    possible_chars.find('L') != std::string::npos ||
-        //    possible_chars.find('T') != std::string::npos)
-//        else if (recommend == 'E' || recommend == 'F' || recommend == 'H' || recommend == 'L' || recommend == 'T')
-//        {
-//            recog = Distinguish_E_F_H_L_T(char_mat);
-//        }
-//        else if (recommend == '7' || recommend == 'J')
-//        {
-//            recog = Distinguish_7_J(char_mat);
-//        }
 
         std::cout << "Possible chars: ";
         for (int i = 0; i < possible_chars.size(); i++)
@@ -93,7 +68,7 @@ int main()
         {
             std::cout << std::endl << "Recognized as: " << recog;
         }
-        else if (recommend != '\0')
+        if (recommend != '\0')
         {
             std::cout << std::endl << "Recommend: " << recommend;
         }

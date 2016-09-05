@@ -34,6 +34,12 @@ JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
 
 std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
 {
+    if (mat.cols == 1 && mat.rows == 1)
+    {
+        recommend = '1';
+        return std::string("1");
+    }
+
     std::string res;
     std::map<char, double> char_cos_values;
 
