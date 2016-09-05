@@ -72,6 +72,7 @@ int main()
 
         std::cout << std::endl << std::endl;
     }
+
 #endif // __GET_STD_CHAR_IMAGE__
 
     return 0;

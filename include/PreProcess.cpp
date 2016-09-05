@@ -82,6 +82,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     GaussianBlur(src_onechannel, src_onechannel, Size(3, 3), 0, 0);
     int bin_threshold = binarize_by_histogram(src_onechannel, max_count_pixel);
 #endif
+
     std::cout << "Threshold: " << bin_threshold << std::endl;
 
     // binarize
