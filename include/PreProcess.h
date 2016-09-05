@@ -20,7 +20,7 @@ class PreProcess
 {
 public:
     PreProcess();
-    ProcessResult pre_process(const char*, const char*, const char*, bool);
+    ProcessResult pre_process(const char*, const char*, const char*);
 
 private:
     Thin thinner;

@@ -52,7 +52,6 @@
 		<Unit filename="include/crop/LicenseCropper.hpp" />
 		<Unit filename="include/recog/DepthVectorHelper.cpp" />
 		<Unit filename="include/recog/DepthVectorHelper.h" />
-		<Unit filename="include/recog/Distinguishers.hpp" />
 		<Unit filename="include/recog/GetCos.hpp" />
 		<Unit filename="include/recog/JudgeChar.cpp" />
 		<Unit filename="include/recog/JudgeChar.h" />

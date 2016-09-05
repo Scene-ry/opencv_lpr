@@ -32,7 +32,7 @@ JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
 //    }
 }
 
-std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
+std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& recog)
 {
     if (mat.cols == 1 && mat.rows == 1)
     {
@@ -47,7 +47,6 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
     fvec.AddSampleDepthVector(mat, mat_vec_left, mat_vec_right, mat_vec_up, mat_vec_down);
 
     double max_cos_value = 0;
-    recommend = '\0';
 
     for (int i = 0; i < 36; i++)
     {
@@ -98,6 +97,39 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend)
             if (it->second >= lower_th)
                 res.append(1, it->first);
         }
+    }
+
+    // distinguish '0' and '8'
+    if (res.find('0') != std::string::npos && res.find('8') != std::string::npos
+        && (recommend == '0' || recommend == '8'))
+    {
+        int white_area_count = 0;
+        int last_pixel = 0;
+        for (int h = 0; h < mat.rows; h++)
+        {
+            int pixel = (int)mat.at<uchar>(h, CROP_WIDTH / 2);
+            if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
+            {
+                white_area_count++;
+            }
+            last_pixel = pixel;
+        }
+
+        if (white_area_count == 3)
+            recog = '8';
+        else if (white_area_count == 2)
+            recog = '0';
+    }
+
+    // distinguish '0' and 'Q'
+    if (res.find('0') != std::string::npos && res.find('Q') != std::string::npos
+        && (recommend == '0' || recommend == 'Q'))
+    {
+        double down_last_value = mat_vec_down.at(mat_vec_down.size() - 1);
+        if (down_last_value > 2)
+            recog = '0';
+        else
+            recog = 'Q';
     }
 
     return res;

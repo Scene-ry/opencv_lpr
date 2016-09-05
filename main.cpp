@@ -1,7 +1,6 @@
 #include "include/recog/JudgeChar.h"
 #include "include/PreProcess.h"
 #include "include/recog/GetCos.hpp"
-#include "include/recog/Distinguishers.hpp"
 
 //#define CHAR_MAX_WIDTH  1
 //#define CHAR_MAX_HEIGHT 20
@@ -21,9 +20,9 @@ int main()
 #else
     PreProcess pre;
     const char* img_dir = "./images/";
-    const char* filename = "chepai7";
+    const char* filename = "chepai2";
 
-    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg", false);
+    ProcessResult result = pre.pre_process(img_dir, filename, ".jpg");
     //ProcessResult result = ProcessResult::Success;
 
     if (result != ProcessResult::Success)
@@ -52,11 +51,9 @@ int main()
         std::cout << "Reading cropped image " << i << "..." << std::endl;
 
         // begin recognition
-        char recommend;
-        std::string possible_chars = jc.GetPossibleChars(char_mat, recommend);
-
-        // when met some hard-recognized chars
+        char recommend = '\0';
         char recog = '\0';
+        std::string possible_chars = jc.GetPossibleChars(char_mat, recommend, recog);
 
         std::cout << "Possible chars: ";
         for (int i = 0; i < possible_chars.size(); i++)
@@ -68,7 +65,7 @@ int main()
         {
             std::cout << std::endl << "Recognized as: " << recog;
         }
-        if (recommend != '\0')
+        else if (recommend != '\0')
         {
             std::cout << std::endl << "Recommend: " << recommend;
         }

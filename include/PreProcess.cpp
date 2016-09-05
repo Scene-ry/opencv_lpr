@@ -20,18 +20,24 @@ void AddBlackEdge(const Mat& src, Mat& dst)
     }
 }
 
-int GetMeanThreshold(int* hist_gram)
+int GetMeanThreshold(int* hist_gram, int& max_pixel)
 {
-    int sum = 0, amount = 0;
+    int sum = 0, amount = 0, max_count = 0;
     for (int i = 0; i <256; i++)
     {
         amount += hist_gram[i];
         sum += i * hist_gram[i];
+
+        if (hist_gram[i] > max_count)
+        {
+            max_pixel = i;
+            max_count = hist_gram[i];
+        }
     }
     return sum / amount;
 }
 
-int binarize_by_histogram(const Mat& src)
+int binarize_by_histogram(const Mat& src, int& max_pixel)
 {
     int hist[256] = {0};
 
@@ -44,11 +50,11 @@ int binarize_by_histogram(const Mat& src)
         }
     }
 
-    return GetMeanThreshold(hist);
+    return GetMeanThreshold(hist, max_pixel);
 }
 
 
-ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename, const char* extname, bool toReverse)
+ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename, const char* extname)
 {
     std::string s_filename = std::string(img_dir) + filename + extname;
     Mat src = imread(s_filename.c_str());
@@ -72,8 +78,9 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
 #ifdef __GET_STD_CHAR_IMAGE__
     int bin_threshold = 140;
 #else
+    int max_count_pixel;
     GaussianBlur(src_onechannel, src_onechannel, Size(3, 3), 0, 0);
-    int bin_threshold = binarize_by_histogram(src_onechannel);
+    int bin_threshold = binarize_by_histogram(src_onechannel, max_count_pixel);
 #endif
     std::cout << "Threshold: " << bin_threshold << std::endl;
 
@@ -81,7 +88,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     threshold(src_onechannel, src_onechannel, bin_threshold, 255, CV_THRESH_BINARY);
 
     // reverse if needed
-    if (toReverse)
+    if (bin_threshold < max_count_pixel)
         bitwise_not(src_onechannel, src_onechannel);
 
     //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
@@ -143,6 +150,8 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     Mat cr = Mat(src_onechannel_edge, rg_row, rg_col);
     Mat rs;
     resize(cr, rs, Size(CROP_WIDTH, CROP_HEIGHT));
+
+    threshold(rs, rs, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
 
     std::string std_filename = std::string(img_dir) + "crops/" + filename + ".jpg";
     imwrite(std_filename.c_str(), rs);
