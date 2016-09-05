@@ -92,7 +92,7 @@ ProcessResult PreProcess::pre_process(const char* img_dir, const char* filename,
     if (bin_threshold < max_count_pixel)
         bitwise_not(src_onechannel, src_onechannel);
 
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
+    imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
 
 #ifdef __GET_STD_CHAR_IMAGE__
     Mat src_onechannel_edge;

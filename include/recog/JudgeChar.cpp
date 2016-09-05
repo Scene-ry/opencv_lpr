@@ -32,15 +32,16 @@ JudgeChar::JudgeChar(const char* img_dir) : fvec(CROP_WIDTH, CROP_HEIGHT)
 //    }
 }
 
-std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& recog)
+std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& recog)
 {
+    std::map<char, double> res;
     if (mat.cols == 1 && mat.rows == 1)
     {
         recommend = '1';
-        return std::string("1");
+        res.insert(std::make_pair('1', 1.0));
+        return res;
     }
 
-    std::string res;
     std::map<char, double> char_cos_values;
 
     std::vector<double> mat_vec_left, mat_vec_right, mat_vec_up, mat_vec_down;
@@ -68,7 +69,7 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& r
                 max_cos_value = cos_value;
             }
             if (cos_value >= SIMILAR_THRESHOLD)
-                res.append(1, '0' + i);
+                res.insert(std::make_pair('0' + i, cos_value));
         }
         else
         {
@@ -79,13 +80,13 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& r
                 max_cos_value = cos_value;
             }
             if (cos_value >= SIMILAR_THRESHOLD)
-                res.append(1, 'A' + i - 10);
+                res.insert(std::make_pair('A' + i - 10, cos_value));
         }
     }
 
     // increase threshold until a char matches
     max_cos_value = 0;
-    for (double lower_th = SIMILAR_THRESHOLD - 0.01; res.length() <= 0; lower_th -= 0.01)
+    for (double lower_th = SIMILAR_THRESHOLD - 0.01; res.size() <= 0; lower_th -= 0.01)
     {
         for (std::map<char, double>::iterator it = char_cos_values.begin(); it != char_cos_values.end(); it++)
         {
@@ -95,12 +96,12 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& r
                 max_cos_value = it->second;
             }
             if (it->second >= lower_th)
-                res.append(1, it->first);
+                res.insert(std::make_pair(it->first, it->second));
         }
     }
 
     // distinguish '0' and '8'
-    if (res.find('0') != std::string::npos && res.find('8') != std::string::npos
+    if (res.find('0') != res.end() && res.find('8') != res.end()
         && (recommend == '0' || recommend == '8'))
     {
         int white_area_count = 0;
@@ -122,7 +123,7 @@ std::string JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& r
     }
 
     // distinguish '0' and 'Q'
-    if (res.find('0') != std::string::npos && res.find('Q') != std::string::npos
+    if (res.find('0') != res.end() && res.find('Q') != res.end()
         && (recommend == '0' || recommend == 'Q'))
     {
         double down_last_value = mat_vec_down.at(mat_vec_down.size() - 1);

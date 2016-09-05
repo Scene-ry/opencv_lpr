@@ -13,7 +13,7 @@ using namespace cv;
 #define SAMPLE_COUNT      10
 
 #define WHITE_THRESHOLD   80
-#define SIMILAR_THRESHOLD 0.88
+#define SIMILAR_THRESHOLD 0.79   // 0.88 recommended
 
 static std::string IntToString(int num)
 {

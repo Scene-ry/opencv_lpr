@@ -27,5 +27,4 @@ private:
     int bin_threshold;
 };
 
-
 #endif // PREPROCESS_H

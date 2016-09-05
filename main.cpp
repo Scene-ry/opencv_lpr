@@ -20,7 +20,7 @@ int main()
 #else
     PreProcess pre;
     const char* img_dir = "./images/";
-    const char* filename = "chepai2";
+    const char* filename = "chepai7";
 
     ProcessResult result = pre.pre_process(img_dir, filename, ".jpg");
     //ProcessResult result = ProcessResult::Success;
@@ -39,6 +39,7 @@ int main()
     std::cout << "Edge data not included." << std::endl;
 #endif // __GET_EDGE_DATA__
 
+    std::cout << std::endl;
     JudgeChar jc(img_dir);
     for (int i = 0; true; i++)
     {
@@ -53,12 +54,19 @@ int main()
         // begin recognition
         char recommend = '\0';
         char recog = '\0';
-        std::string possible_chars = jc.GetPossibleChars(char_mat, recommend, recog);
+        std::map<char, double> possible_chars = jc.GetPossibleChars(char_mat, recommend, recog);
 
-        std::cout << "Possible chars: ";
-        for (int i = 0; i < possible_chars.size(); i++)
+        // sort by cos values (descending)
+        std::vector<std::pair<char, double> > possible_chars_vec(possible_chars.begin(), possible_chars.end());
+        std::sort(possible_chars_vec.begin(), possible_chars_vec.end(), [](const std::pair<char, double>& p1, const std::pair<char, double>& p2){ return p1.second > p2.second; });
+
+        std::cout << "Possible chars: " << std::endl;
+        for (std::vector<std::pair<char, double> >::iterator it = possible_chars_vec.begin(); it != possible_chars_vec.end();)
         {
-            std::cout << possible_chars.at(i) << " ";
+            std::cout << it->first << ": " << it->second;
+            if (++it == possible_chars_vec.end())
+                break;
+            std::cout << std::endl;
         }
 
         if (recog != '\0')

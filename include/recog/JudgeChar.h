@@ -24,7 +24,7 @@ public:
 //    std::vector<double> StdCharVectorsUp[36];
 //    std::vector<double> StdCharVectorsDown[36];
     JudgeChar(const char*);
-    std::string GetPossibleChars(const Mat&, char&, char&);
+    std::map<char, double> GetPossibleChars(const Mat&, char&, char&);
 
 private:
     DepthVectorHelper fvec;
