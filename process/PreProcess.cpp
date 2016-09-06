@@ -75,14 +75,14 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
     // get the contours
     int char_max_width = 1;
     int char_max_height = src_crop.rows / 2;
-    std::vector<std::vector<Point> > contours;
+    std::vector<Mat> contours;
     findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
     if (is_cout)
         std::cout << "Count of contours: " << contours.size() << std::endl;
 
     std::vector<Rect> rects;
-    for (std::vector<std::vector<Point> >::iterator it = contours.begin(); it != contours.end(); it++)
+    for (std::vector<Mat>::iterator it = contours.begin(); it != contours.end(); it++)
     {
         Rect r = boundingRect(*it);
         // only store large contours
