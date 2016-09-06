@@ -1,4 +1,4 @@
-#include "LPRProcess.h"
+#include "process/LPRProcess.h"
 
 int main()
 {
@@ -13,11 +13,11 @@ int main()
      * param5: path to output cropped images (default: empty)
      */
     ProcessLicensePlate(
-        "D:\\wuja6_Projects\\chepai\\chepai8.jpg",
+        "./images/chepai1.jpg",
         result,
+        true,
         false,
-        false,
-        "D:\\wuja6_Projects\\chepai\\crrrr\\"
+        "./images/crops/"
     );
 
     std::cout << "Result: " << result << std::endl;
