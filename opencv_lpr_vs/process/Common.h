@@ -6,8 +6,6 @@
 #include <string>
 #include <sstream>
 
-using namespace cv;
-
 #define CROP_WIDTH        20
 #define CROP_HEIGHT       40
 

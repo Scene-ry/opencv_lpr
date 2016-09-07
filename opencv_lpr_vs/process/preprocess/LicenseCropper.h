@@ -3,6 +3,6 @@
 
 #include "../Common.h"
 
-void LicenseCropper(const Mat&, Mat&);
+void LicenseCropper(const cv::Mat&, cv::Mat&);
 
 #endif // LICENSECROPPER_HPP_INCLUDED

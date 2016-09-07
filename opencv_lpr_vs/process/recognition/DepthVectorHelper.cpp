@@ -4,7 +4,7 @@ DepthVectorHelper::DepthVectorHelper(int w, int h) : width(w), height(h)
 {
 }
 
-void DepthVectorHelper::AddSampleDepthVector(const Mat& mat, std::vector<double>& vec_left, std::vector<double>& vec_right, std::vector<double>& vec_up, std::vector<double>& vec_down)
+void DepthVectorHelper::AddSampleDepthVector(const cv::Mat& mat, std::vector<double>& vec_left, std::vector<double>& vec_right, std::vector<double>& vec_up, std::vector<double>& vec_down)
 {
     AddSampleDepthVectorLeft(mat, vec_left);
     AddSampleDepthVectorRight(mat, vec_right);
@@ -12,7 +12,7 @@ void DepthVectorHelper::AddSampleDepthVector(const Mat& mat, std::vector<double>
     AddSampleDepthVectorDown(mat, vec_down);
 }
 
-void DepthVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorLeft(const cv::Mat& mat, std::vector<double>& result)
 {
     int h_incr = height / SAMPLE_COUNT;
     bool isPushed;
@@ -44,7 +44,7 @@ void DepthVectorHelper::AddSampleDepthVectorLeft(const Mat& mat, std::vector<dou
     }
 }
 
-void DepthVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorRight(const cv::Mat& mat, std::vector<double>& result)
 {
     int h_incr = height / SAMPLE_COUNT;
     bool isPushed;
@@ -76,7 +76,7 @@ void DepthVectorHelper::AddSampleDepthVectorRight(const Mat& mat, std::vector<do
     }
 }
 
-void DepthVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorUp(const cv::Mat& mat, std::vector<double>& result)
 {
     int w_incr = width / SAMPLE_COUNT;
     bool isPushed;
@@ -108,7 +108,7 @@ void DepthVectorHelper::AddSampleDepthVectorUp(const Mat& mat, std::vector<doubl
     }
 }
 
-void DepthVectorHelper::AddSampleDepthVectorDown(const Mat& mat, std::vector<double>& result)
+void DepthVectorHelper::AddSampleDepthVectorDown(const cv::Mat& mat, std::vector<double>& result)
 {
     int w_incr = width / SAMPLE_COUNT;
     bool isPushed;

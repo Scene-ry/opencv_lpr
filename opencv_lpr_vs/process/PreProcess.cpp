@@ -11,7 +11,7 @@ int GetMeanThreshold(int* hist_gram)
     return sum / amount;
 }
 
-int binarize_by_histogram(const Mat& src)
+int binarize_by_histogram(const cv::Mat& src)
 {
     int hist[256] = {0};
 
@@ -27,7 +27,7 @@ int binarize_by_histogram(const Mat& src)
     return GetMeanThreshold(hist);
 }
 
-void reverse_if_needed(Mat& src)
+void reverse_if_needed(cv::Mat& src)
 {
     int white_count = 0;
     for (int h = 0; h < src.rows; h++)
@@ -44,10 +44,10 @@ void reverse_if_needed(Mat& src)
         bitwise_not(src, src);
 }
 
-ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, bool is_output_img, bool is_cout, const char* output_img_path)
+ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_chars, bool is_output_img, bool is_cout, const char* output_img_path)
 {
     //std::string s_filename = std::string(img_dir) + filename + extname;
-    Mat src = imread(img_path);
+    cv::Mat src = cv::imread(img_path);
 
     if (!src.data)
     {
@@ -55,14 +55,14 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
     }
 
     // convert to 1-channel
-    Mat src_onechannel = Mat::zeros(src.size(), CV_8UC1);
+    cv::Mat src_onechannel = cv::Mat::zeros(src.size(), CV_8UC1);
 
     // convert to gray
     cvtColor(src, src_onechannel, CV_BGR2GRAY);
-    imwrite("./samples/crops/gray.jpg", src_onechannel);
+    //imwrite("./samples/crops/gray.jpg", src_onechannel);
 
     // Gaussian Blur
-    GaussianBlur(src_onechannel, src_onechannel, Size(3, 3), 0, 0);
+    GaussianBlur(src_onechannel, src_onechannel, cv::Size(3, 3), 0, 0);
 
     // Get the proper threshold value
     int bin_threshold = binarize_by_histogram(src_onechannel);
@@ -76,26 +76,26 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
     // reverse if needed
     reverse_if_needed(src_onechannel);
 
-    imwrite("./samples/crops/binary.jpg", src_onechannel);
+    //imwrite("./samples/crops/binary.jpg", src_onechannel);
 
     // crop
-    Mat src_crop;
+    cv::Mat src_crop;
     LicenseCropper(src_onechannel, src_crop);
     //imwrite("./samples/crops/test_crop.jpg", src_crop);
 
     // get the contours
     int char_max_width = 1;
     int char_max_height = src_crop.rows / 2;
-    std::vector<Mat> contours;
+    std::vector<cv::Mat> contours;
     findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
     if (is_cout)
         std::cout << "Count of contours: " << contours.size() << std::endl;
 
-    std::vector<Rect> rects;
-    for (std::vector<Mat>::iterator it = contours.begin(); it != contours.end(); it++)
+    std::vector<cv::Rect> rects;
+    for (std::vector<cv::Mat>::iterator it = contours.begin(); it != contours.end(); it++)
     {
-        Rect r = boundingRect(*it);
+        cv::Rect r = boundingRect(*it);
         // only store large contours
         if (r.width >= char_max_width && r.height >= char_max_height)
         {
@@ -107,14 +107,14 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
         std::cout << "Count of rects available: " << rects.size() << std::endl;
 
     // sort contours from left to right
-    std::sort(rects.begin(), rects.end(), [](Rect a, Rect b){ return a.x < b.x; });
+    std::sort(rects.begin(), rects.end(), [](cv::Rect a, cv::Rect b){ return a.x < b.x; });
 
     int i = 0;
-    for (std::vector<Rect>::iterator it = rects.begin(); it != rects.end(); it++)
+    for (std::vector<cv::Rect>::iterator it = rects.begin(); it != rects.end(); it++)
     {
-        Rect r = *it;
+        cv::Rect r = *it;
 
-        Range rg_row, rg_col;
+        cv::Range rg_row, rg_col;
 
         //std::cout << r.y << " " << r.height << " " << r.x << " " << r.width << std::endl;
 
@@ -123,19 +123,19 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
         rg_col.start = r.x;
         rg_col.end = r.x + r.width;
 
-        Mat tmp(src_crop, rg_row, rg_col);
+        cv::Mat tmp(src_crop, rg_row, rg_col);
 
-        Mat tmp_resize;
+        cv::Mat tmp_resize;
         //std::cout << (tmp.rows / (double)tmp.cols) << std::endl;
         if (tmp.rows / (double)tmp.cols > 2.5)
         {
             // deal with '1'
-            resize(tmp, tmp_resize, Size(1, 1));
+            resize(tmp, tmp_resize, cv::Size(1, 1));
         }
         else
         {
             // normalization
-            resize(tmp, tmp_resize, Size(CROP_WIDTH, CROP_HEIGHT));
+            resize(tmp, tmp_resize, cv::Size(CROP_WIDTH, CROP_HEIGHT));
         }
 
         threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);

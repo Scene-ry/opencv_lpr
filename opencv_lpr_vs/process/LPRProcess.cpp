@@ -2,7 +2,7 @@
 
 int ProcessLicensePlate(const char* img_path, std::string& result, bool is_output_img, bool is_cout, const char* output_img_path = "")
 {
-    std::vector<Mat> split_chars;
+    std::vector<cv::Mat> split_chars;
 
     //const char* img_dir = "./images/";
     //const char* filename = "chepai1";
@@ -23,9 +23,9 @@ int ProcessLicensePlate(const char* img_path, std::string& result, bool is_outpu
     JudgeChar jc;
 
     int crop_count = 0;
-    for (std::vector<Mat>::iterator it = split_chars.begin(); it != split_chars.end(); it++)
+    for (std::vector<cv::Mat>::iterator it = split_chars.begin(); it != split_chars.end(); it++)
     {
-        Mat char_mat = *it;
+        cv::Mat char_mat = *it;
 
         if (!char_mat.data)
             break;

@@ -4,7 +4,7 @@ JudgeChar::JudgeChar() : fvec(CROP_WIDTH, CROP_HEIGHT)
 {
 }
 
-std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& recog)
+std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& recommend, char& recog)
 {
     std::map<char, double> res;
     if (mat.cols == 1 && mat.rows == 1)
