@@ -3,6 +3,7 @@
 
 #include "GetCos.h"
 #include "DepthVectorHelper.h"
+#include "Distinguishers.h"
 #include "std_depth_data.h"
 
 #include <map>

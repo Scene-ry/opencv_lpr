@@ -126,6 +126,7 @@
     <ClInclude Include="process\PreProcess.h" />
     <ClInclude Include="process\preprocess\LicenseCropper.h" />
     <ClInclude Include="process\recognition\DepthVectorHelper.h" />
+    <ClInclude Include="process\recognition\Distinguishers.h" />
     <ClInclude Include="process\recognition\GetCos.h" />
     <ClInclude Include="process\recognition\JudgeChar.h" />
     <ClInclude Include="process\recognition\std_depth_data.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="process\PreProcess.cpp" />
     <ClCompile Include="process\preprocess\LicenseCropper.cpp" />
     <ClCompile Include="process\recognition\DepthVectorHelper.cpp" />
+    <ClCompile Include="process\recognition\Distinguishers.cpp" />
     <ClCompile Include="process\recognition\GetCos.cpp" />
     <ClCompile Include="process\recognition\JudgeChar.cpp" />
     <ClCompile Include="process\recognition\std_depth_data.cpp" />

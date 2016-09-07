@@ -111,13 +111,51 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
                 break;
             }
         }
-        
+
         //double down_last_value = mat_vec_down.at(mat_vec_down.size() - 1);
         if (down_last_value > 1)
             recog = '0';
         else
             recog = 'Q';
     }
+
+    //// distinguish '0' 'D' '8' 'Q'
+    //bool maybe_0_8 = false, maybe_0_Q = false, maybe_8_Q = false, maybe_0_D = false, maybe_8_D = false, maybe_D_Q = false;
+    //if (res.find('0') != res.end() && res.find('8') != res.end()
+    //    && (recommend == '0' || recommend == '8'))
+    //{
+    //    maybe_0_8 = true;
+    //}
+    //if (res.find('0') != res.end() && res.find('Q') != res.end()
+    //    && (recommend == '0' || recommend == 'Q'))
+    //{
+    //    maybe_0_Q = true;
+    //}
+    //if (res.find('8') != res.end() && res.find('Q') != res.end()
+    //    && (recommend == '8' || recommend == 'Q'))
+    //{
+    //    maybe_8_Q = true;
+    //}
+    //if (res.find('0') != res.end() && res.find('D') != res.end()
+    //    && (recommend == '0' || recommend == 'D'))
+    //{
+    //    maybe_0_D = true;
+    //}
+    //if (res.find('8') != res.end() && res.find('D') != res.end()
+    //    && (recommend == '8' || recommend == 'D'))
+    //{
+    //    maybe_0_D = true;
+    //}
+    //if (res.find('D') != res.end() && res.find('Q') != res.end()
+    //    && (recommend == 'D' || recommend == 'Q'))
+    //{
+    //    maybe_D_Q = true;
+    //}
+    //
+    //if (maybe_0_8 || maybe_0_Q || maybe_8_Q || maybe_0_D || maybe_8_D || maybe_D_Q)
+    //{
+    //    Distinguish_0_8_D_Q(mat, recog);
+    //}
 
     return res;
 }

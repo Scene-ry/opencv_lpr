@@ -52,7 +52,7 @@ int main()
         int result_value = ProcessLicensePlate(
             img_path.c_str(),
             result_str,
-            true,
+            false,
             false,
             crop_output_path.c_str()
             );
