@@ -1,23 +1,17 @@
 #include "PreProcess.h"
 
-int GetMeanThreshold(int* hist_gram, int& max_pixel)
+int GetMeanThreshold(int* hist_gram)
 {
     int sum = 0, amount = 0, max_count = 0;
     for (int i = 0; i <256; i++)
     {
         amount += hist_gram[i];
         sum += i * hist_gram[i];
-
-        if (hist_gram[i] > max_count)
-        {
-            max_pixel = i;
-            max_count = hist_gram[i];
-        }
     }
     return sum / amount;
 }
 
-int binarize_by_histogram(const Mat& src, int& max_pixel)
+int binarize_by_histogram(const Mat& src)
 {
     int hist[256] = {0};
 
@@ -30,9 +24,25 @@ int binarize_by_histogram(const Mat& src, int& max_pixel)
         }
     }
 
-    return GetMeanThreshold(hist, max_pixel);
+    return GetMeanThreshold(hist);
 }
 
+void reverse_if_needed(Mat& src)
+{
+    int white_count = 0;
+    for (int h = 0; h < src.rows; h++)
+    {
+        for (int w = 0; w < src.cols; w++)
+        {
+            int pixel = (int)src.at<uchar>(h, w);
+            if (pixel >= WHITE_THRESHOLD)
+                white_count++;
+        }
+    }
+
+    if (white_count / (double)(src.rows * src.cols) > 0.5)
+        bitwise_not(src, src);
+}
 
 ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, bool is_output_img, bool is_cout, const char* output_img_path)
 {
@@ -49,11 +59,13 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
 
     // convert to gray
     cvtColor(src, src_onechannel, CV_BGR2GRAY);
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/gray.jpg", src_onechannel);
+    imwrite("./samples/crops/gray.jpg", src_onechannel);
 
-    int max_count_pixel;
+    // Gaussian Blur
     GaussianBlur(src_onechannel, src_onechannel, Size(3, 3), 0, 0);
-    int bin_threshold = binarize_by_histogram(src_onechannel, max_count_pixel);
+
+    // Get the proper threshold value
+    int bin_threshold = binarize_by_histogram(src_onechannel);
 
     if (is_cout)
         std::cout << "Threshold: " << bin_threshold << std::endl;
@@ -62,15 +74,14 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
     threshold(src_onechannel, src_onechannel, bin_threshold, 255, CV_THRESH_BINARY);
 
     // reverse if needed
-    if (bin_threshold < max_count_pixel)
-        bitwise_not(src_onechannel, src_onechannel);
+    reverse_if_needed(src_onechannel);
 
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/binary.jpg", src_onechannel);
+    imwrite("./samples/crops/binary.jpg", src_onechannel);
 
     // crop
     Mat src_crop;
     LicenseCropper(src_onechannel, src_crop);
-    //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test_crop.jpg", src_crop);
+    //imwrite("./samples/crops/test_crop.jpg", src_crop);
 
     // get the contours
     int char_max_width = 1;
@@ -132,7 +143,7 @@ ProcessResult pre_process(const char* img_path, std::vector<Mat>& split_chars, b
         if (is_output_img)
         {
             //std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
-            std::string s_filename = std::string(output_img_path) + "/cut_" + IntToString(i++) + ".jpg";
+            std::string s_filename = std::string(output_img_path) + "_cut_" + IntToString(i++) + ".jpg";
             imwrite(s_filename.c_str(), tmp_resize);
         }
         split_chars.push_back(tmp_resize);

@@ -23,7 +23,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recomme
 
     for (int i = 0; i < 36; i++)
     {
-        if (i == 18 || i == 24)
+        if (i == 1 || i == 18 || i == 24)
             continue;
 
         double cos_value_left = GetVectorCos(mat_vec_left, StdCharVectorsLeft[i]);
@@ -89,7 +89,9 @@ std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recomme
         }
 
         if (white_area_count == 3)
+        {
             recog = '8';
+        }
         else if (white_area_count == 2)
             recog = '0';
     }
@@ -98,8 +100,20 @@ std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recomme
     if (res.find('0') != res.end() && res.find('Q') != res.end()
         && (recommend == '0' || recommend == 'Q'))
     {
-        double down_last_value = mat_vec_down.at(mat_vec_down.size() - 1);
-        if (down_last_value > 2)
+        double down_last_value = 0;
+        int selected_col = mat.cols - 2;
+        for (int h = mat.rows - 1; h >= 0; h--)
+        {
+            int pixel = mat.at<uchar>(h, selected_col);
+            if (pixel >= WHITE_THRESHOLD)
+            {
+                down_last_value = mat.rows - h - 1;
+                break;
+            }
+        }
+        
+        //double down_last_value = mat_vec_down.at(mat_vec_down.size() - 1);
+        if (down_last_value > 1)
             recog = '0';
         else
             recog = 'Q';
