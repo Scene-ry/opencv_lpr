@@ -1,6 +1,5 @@
-OpenCV LPR(License Plate Recognition) project built with Code::Blocks.
+Now the project can be ran in Viisual Studio.
 
-Windows: opencv_lpr.cbp
-Linux: opencv_lpr_linux.cbp
+Project in Code::Blocks has been moved to branch "DEV_CODEBLOCKS"
 
-(OpenCV libraries reqiured. In Windows I put them into D:\opencv)
+branch "FIRSTDEV" stores the initial project which is not standardized yet.

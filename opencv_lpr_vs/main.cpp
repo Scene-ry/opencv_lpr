@@ -2,7 +2,7 @@
 
 int main()
 {
-    std::string result;
+    std::string result_str;
 
     /**
      * the function to recognize chars on a license plate
@@ -10,16 +10,16 @@ int main()
      * param2: recognition result (by reference)
      * param3: whether output cropped images or not
      * param4: whether output messages to console or not
-     * param5: path to output cropped images (default: empty)
+     * param5: folder to output cropped images (default: empty)
      */
-    ProcessLicensePlate(
+    int result_value = ProcessLicensePlate(
         "./images/chepai1.jpg",
-        result,
+        result_str,
         true,
         false,
         "./images/crops/"
     );
 
-    std::cout << "Result: " << result << std::endl;
-    return 0;
+    std::cout << "Result: " << result_str << std::endl;
+    return result_value;
 }
