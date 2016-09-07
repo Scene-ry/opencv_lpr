@@ -41,7 +41,7 @@ void reverse_if_needed(cv::Mat& src)
     }
 
     if (white_count / (double)(src.rows * src.cols) > 0.5)
-        bitwise_not(src, src);
+        cv::bitwise_not(src, src);
 }
 
 ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_chars, bool is_output_img, bool is_cout, const char* output_img_path)
@@ -58,29 +58,39 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     cv::Mat src_onechannel = cv::Mat::zeros(src.size(), CV_8UC1);
 
     // convert to gray
-    cvtColor(src, src_onechannel, CV_BGR2GRAY);
+    cv::cvtColor(src, src_onechannel, CV_BGR2GRAY);
     //imwrite("./samples/crops/gray.jpg", src_onechannel);
 
+    // Enhancement
+    cv::Mat src_enhance;
+    src_enhance = src_onechannel;
+    //cv::equalizeHist(src_onechannel, src_enhance);
+    //cv::bilateralFilter(src_onechannel, src_enhance, 9, 18, 4);
+    //cv::medianBlur(src_onechannel, src_enhance, 3);
+    //src_onechannel.convertTo(src_enhance, -1, 2.0, 50);
+
+    //imwrite("./samples/crops/enhance.jpg", src_enhance);
+
     // Gaussian Blur
-    GaussianBlur(src_onechannel, src_onechannel, cv::Size(3, 3), 0, 0);
+    cv::GaussianBlur(src_enhance, src_enhance, cv::Size(3, 3), 0, 0);
 
     // Get the proper threshold value
-    int bin_threshold = binarize_by_histogram(src_onechannel);
+    int bin_threshold = binarize_by_histogram(src_enhance);
 
     if (is_cout)
         std::cout << "Threshold: " << bin_threshold << std::endl;
 
     // binarize
-    threshold(src_onechannel, src_onechannel, bin_threshold, 255, CV_THRESH_BINARY);
+    cv::threshold(src_enhance, src_enhance, bin_threshold, 255, CV_THRESH_BINARY);
 
     // reverse if needed
-    reverse_if_needed(src_onechannel);
+    reverse_if_needed(src_enhance);
 
-    //imwrite("./samples/crops/binary.jpg", src_onechannel);
+    //imwrite("./samples/crops/binary.jpg", src_enhance);
 
     // crop
     cv::Mat src_crop;
-    LicenseCropper(src_onechannel, src_crop);
+    LicenseCropper(src_enhance, src_crop);
     //imwrite("./samples/crops/test_crop.jpg", src_crop);
 
     // get the contours
@@ -130,21 +140,21 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         if (tmp.rows / (double)tmp.cols > 2.5)
         {
             // deal with '1'
-            resize(tmp, tmp_resize, cv::Size(1, 1));
+            cv::resize(tmp, tmp_resize, cv::Size(1, 1));
         }
         else
         {
             // normalization
-            resize(tmp, tmp_resize, cv::Size(CROP_WIDTH, CROP_HEIGHT));
+            cv::resize(tmp, tmp_resize, cv::Size(CROP_WIDTH, CROP_HEIGHT));
         }
 
-        threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
+        cv::threshold(tmp_resize, tmp_resize, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
 
         if (is_output_img)
         {
             //std::string s_filename = std::string(img_dir) + "crops/" + filename + "_cut_" + IntToString(i++) + ".jpg";
             std::string s_filename = std::string(output_img_path) + "_cut_" + IntToString(i++) + ".jpg";
-            imwrite(s_filename.c_str(), tmp_resize);
+            cv::imwrite(s_filename.c_str(), tmp_resize);
         }
         split_chars.push_back(tmp_resize);
 
