@@ -2,7 +2,7 @@
 
 int GetMeanThreshold(int* hist_gram)
 {
-    int sum = 0, amount = 0, max_count = 0;
+    int sum = 0, amount = 0;
     for (int i = 0; i <256; i++)
     {
         amount += hist_gram[i];
@@ -85,9 +85,9 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
 
     // reverse if needed
     reverse_if_needed(src_enhance);
-    cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+    //cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
 
-    imwrite("./samples/crops/binary.jpg", src_enhance);
+    //imwrite("./samples/crops/binary.jpg", src_enhance);
 
     // crop
     cv::Mat src_crop;

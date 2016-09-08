@@ -2,17 +2,20 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#define PLATE_CHAR_SIZE  8
+#else
+#include <dirent.h>
+#define PLATE_CHAR_SIZE  9
 #endif
 
-#define PLATE_CHAR_SIZE  8
 #define PLATE_RECOG_SIZE 6
 
 int main()
 {
-#ifdef _WIN32
     std::vector<std::string> plate_images;
     std::vector<std::string> error_chars;
 
+#ifdef _WIN32
     WIN32_FIND_DATA search_data;
     memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
     HANDLE handle = FindFirstFile("./samples/images/*", &search_data);
@@ -28,7 +31,20 @@ int main()
     FindClose(handle);
 
 #else
-    std::cout << "Program only available in Windows!" << std::endl;
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir("./samples/images/")) != 0)
+    {
+        while ((ent = readdir(dir)) != 0)
+        {
+            plate_images.push_back(std::string(ent->d_name));
+        }
+        closedir(dir);
+    }
+    else
+    {
+        std::cout << "File open error." << std::endl;
+    }
 #endif
 
     std::string img_path, crop_output_path, result_str;
@@ -65,7 +81,7 @@ int main()
         if (result_value == 0 && result_str.size() >= PLATE_RECOG_SIZE)
         {
             error_chars.clear();
-            
+
             result_str = result_str.substr(result_str.size() - PLATE_RECOG_SIZE, PLATE_RECOG_SIZE);
             unsigned long long plate_name_size = plate_name.size(), res_size = result_str.size();
 
