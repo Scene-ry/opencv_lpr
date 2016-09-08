@@ -85,8 +85,9 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
 
     // reverse if needed
     reverse_if_needed(src_enhance);
+    cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
 
-    //imwrite("./samples/crops/binary.jpg", src_enhance);
+    imwrite("./samples/crops/binary.jpg", src_enhance);
 
     // crop
     cv::Mat src_crop;

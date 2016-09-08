@@ -48,4 +48,6 @@ void Distinguish_0_8_D_Q(const cv::Mat& mat, char& recog)
             return;
         }
     }
+
+    recog = '0';
 }
