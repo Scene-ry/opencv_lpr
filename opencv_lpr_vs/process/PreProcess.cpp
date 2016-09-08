@@ -85,9 +85,46 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
 
     // reverse if needed
     reverse_if_needed(src_enhance);
-    //cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
 
-    //imwrite("./samples/crops/binary.jpg", src_enhance);
+    if (is_output_img)
+    {
+        std::string s_filename = std::string(output_img_path) + "binary.jpg";
+        cv::imwrite(s_filename.c_str(), src_enhance);
+    }
+
+    if (src_enhance.rows >= 50)
+    {
+        cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+
+        // remove small areas
+        std::vector<cv::Mat> contours;
+        cv::findContours(src_enhance.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+        for (std::vector<cv::Mat>::iterator it = contours.begin(); it != contours.end(); it++)
+        {
+            cv::Rect r = boundingRect(*it);
+
+            if (!(r.width >= 1 && r.height >= src_enhance.rows / 2))
+            {
+                for (int h = r.y; h < r.y + r.height; h++)
+                {
+                    for (int w = r.x; w < r.x + r.width; w++)
+                    {
+                        src_enhance.at<uchar>(h, w) = 0;
+                    }
+                }
+            }
+        }
+
+        cv::dilate(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+        cv::dilate(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+        cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+    }
+
+    if (is_output_img)
+    {
+        std::string s_filename = std::string(output_img_path) + "openclose.jpg";
+        cv::imwrite(s_filename.c_str(), src_enhance);
+    }
 
     // crop
     cv::Mat src_crop;
@@ -98,7 +135,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     int char_max_width = 1;
     int char_max_height = src_crop.rows / 2;
     std::vector<cv::Mat> contours;
-    findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    cv::findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
     if (is_cout)
         std::cout << "Count of contours: " << contours.size() << std::endl;
@@ -111,17 +148,6 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         if (r.width >= char_max_width && r.height >= char_max_height)
         {
             rects.push_back(r);
-        }
-        // remove small areas
-        else
-        {
-            for (int h = r.y; h < r.y + r.height; h++)
-            {
-                for (int w = r.x; w < r.x + r.width; w++)
-                {
-                    src_crop.at<uchar>(h, w) = 0;
-                }
-            }
         }
     }
 

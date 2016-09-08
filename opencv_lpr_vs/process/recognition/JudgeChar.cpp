@@ -73,9 +73,15 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
     }
 
     // distinguish '0' '8' 'D' 'Q'
-    if (recommend == '0' || recommend == '8' || recommend == 'D' || recommend == 'Q')
+    if (recommend == '0' || recommend == '8' || recommend == 'Q')
     {
-        Distinguish_0_8_D_Q(mat, recog);
+        Distinguish_0_8_Q(mat, recog);
+    }
+
+    // distinguish '5' 'S'
+    if (recommend == '5' || recommend == 'S')
+    {
+        Distinguish_5_S(mat, recog);
     }
 
     return res;
