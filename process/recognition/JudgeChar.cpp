@@ -4,7 +4,7 @@ JudgeChar::JudgeChar() : fvec(CROP_WIDTH, CROP_HEIGHT)
 {
 }
 
-std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recommend, char& recog)
+std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& recommend, char& recog)
 {
     std::map<char, double> res;
     if (mat.cols == 1 && mat.rows == 1)
@@ -23,7 +23,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recomme
 
     for (int i = 0; i < 36; i++)
     {
-        if (i == 18 || i == 24)
+        if (i == 1 || i == 18 || i == 24)
             continue;
 
         double cos_value_left = GetVectorCos(mat_vec_left, StdCharVectorsLeft[i]);
@@ -72,37 +72,10 @@ std::map<char, double> JudgeChar::GetPossibleChars(const Mat& mat, char& recomme
         }
     }
 
-    // distinguish '0' and '8'
-    if (res.find('0') != res.end() && res.find('8') != res.end()
-        && (recommend == '0' || recommend == '8'))
+    // distinguish '0' '8' 'D' 'Q'
+    if (recommend == '0' || recommend == '8' || recommend == 'D' || recommend == 'Q')
     {
-        int white_area_count = 0;
-        int last_pixel = 0;
-        for (int h = 0; h < mat.rows; h++)
-        {
-            int pixel = (int)mat.at<uchar>(h, CROP_WIDTH / 2);
-            if (pixel >= WHITE_THRESHOLD && last_pixel < WHITE_THRESHOLD)
-            {
-                white_area_count++;
-            }
-            last_pixel = pixel;
-        }
-
-        if (white_area_count == 3)
-            recog = '8';
-        else if (white_area_count == 2)
-            recog = '0';
-    }
-
-    // distinguish '0' and 'Q'
-    if (res.find('0') != res.end() && res.find('Q') != res.end()
-        && (recommend == '0' || recommend == 'Q'))
-    {
-        double down_last_value = mat_vec_down.at(mat_vec_down.size() - 1);
-        if (down_last_value > 2)
-            recog = '0';
-        else
-            recog = 'Q';
+        Distinguish_0_8_D_Q(mat, recog);
     }
 
     return res;

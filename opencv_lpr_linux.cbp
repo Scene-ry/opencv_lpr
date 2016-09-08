@@ -52,6 +52,8 @@
 		<Unit filename="process/preprocess/LicenseCropper.h" />
 		<Unit filename="process/recognition/DepthVectorHelper.cpp" />
 		<Unit filename="process/recognition/DepthVectorHelper.h" />
+		<Unit filename="process/recognition/Distinguishers.cpp" />
+		<Unit filename="process/recognition/Distinguishers.h" />
 		<Unit filename="process/recognition/GetCos.cpp" />
 		<Unit filename="process/recognition/GetCos.h" />
 		<Unit filename="process/recognition/JudgeChar.cpp" />

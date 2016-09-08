@@ -13,6 +13,6 @@ enum ProcessResult
     Failed  = -1
 };
 
-ProcessResult pre_process(const char*, std::vector<Mat>&, bool, bool, const char*);
+ProcessResult pre_process(const char*, std::vector<cv::Mat>&, bool, bool, const char*);
 
 #endif // PREPROCESS_H

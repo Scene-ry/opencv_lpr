@@ -1,6 +1,6 @@
 #include "LicenseCropper.h"
 
-void LicenseCropper(const Mat& src, Mat& dst)
+void LicenseCropper(const cv::Mat& src, cv::Mat& dst)
 {
     int width = src.cols, height = src.rows;
     int h_start = 0, h_end = height, w_start = 0, w_end = width;
@@ -51,12 +51,12 @@ void LicenseCropper(const Mat& src, Mat& dst)
         }
     }
 
-    Range rg_row, rg_col;
+    cv::Range rg_row, rg_col;
     rg_row.start = h_start;
     rg_row.end = h_end;
     rg_col.start = w_start;
     rg_col.end = w_end;
 
-    dst = Mat(src, rg_row, rg_col);
+    dst = cv::Mat(src, rg_row, rg_col);
     //imwrite("/home/user/Desktop/opencv/opencv_ocr_test/images/crops/test.jpg", dst);
 }

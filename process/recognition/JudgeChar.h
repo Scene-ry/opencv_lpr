@@ -3,17 +3,16 @@
 
 #include "GetCos.h"
 #include "DepthVectorHelper.h"
+#include "Distinguishers.h"
 #include "std_depth_data.h"
 
 #include <map>
-
-using namespace cv;
 
 class JudgeChar
 {
 public:
     JudgeChar();
-    std::map<char, double> GetPossibleChars(const Mat&, char&, char&);
+    std::map<char, double> GetPossibleChars(const cv::Mat&, char&, char&);
 
 private:
     DepthVectorHelper fvec;
