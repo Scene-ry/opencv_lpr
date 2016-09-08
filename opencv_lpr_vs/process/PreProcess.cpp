@@ -111,6 +111,17 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         {
             rects.push_back(r);
         }
+        // remove small areas
+        else
+        {
+            for (int h = r.y; h < r.y + r.height; h++)
+            {
+                for (int w = r.x; w < r.x + r.width; w++)
+                {
+                    src_crop.at<uchar>(h, w) = 0;
+                }
+            }
+        }
     }
 
     if (is_cout)

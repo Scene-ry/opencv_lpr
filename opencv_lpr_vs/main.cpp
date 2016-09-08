@@ -27,6 +27,10 @@ int main()
     //Close the handle after use or memory/resource leak
     FindClose(handle);
 
+#else
+    std::cout << "Program only available in Windows!" << std::endl;
+#endif
+
     std::string img_path, crop_output_path, result_str;
     int correct_count = 0;
     for (std::vector<std::string>::iterator it = plate_images.begin(); it != plate_images.end(); it++)
@@ -92,10 +96,8 @@ int main()
         }
     }
 
-    std::cout << "Correct rate: " << (correct_count / (double)plate_images.size() * 100) << "%" << std::endl;
-    
-#else
-    std::cout << "Program only available in Windows!" << std::endl;
-#endif
+    if (!plate_images.empty())
+        std::cout << "Correct rate: " << (correct_count / (double)plate_images.size() * 100) << "%" << std::endl;
+
     return 0;
 }
