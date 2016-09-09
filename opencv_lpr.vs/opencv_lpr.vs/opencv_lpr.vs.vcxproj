@@ -126,8 +126,8 @@
     <ClInclude Include="..\..\opencv_lpr.core\process\LPRProcess.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\PreProcess.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\preprocess\LicenseCropper.h" />
+    <ClInclude Include="..\..\opencv_lpr.core\process\recognition\CharExcluders.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\DepthVectorHelper.h" />
-    <ClInclude Include="..\..\opencv_lpr.core\process\recognition\Distinguishers.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\GetCos.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\JudgeChar.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\std_depth_data.h" />
@@ -139,8 +139,8 @@
     <ClCompile Include="..\..\opencv_lpr.core\process\LPRProcess.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\PreProcess.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\preprocess\LicenseCropper.cpp" />
+    <ClCompile Include="..\..\opencv_lpr.core\process\recognition\CharExcluders.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\DepthVectorHelper.cpp" />
-    <ClCompile Include="..\..\opencv_lpr.core\process\recognition\Distinguishers.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\GetCos.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\JudgeChar.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\std_depth_data.cpp" />

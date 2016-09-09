@@ -34,9 +34,7 @@ int ProcessLicensePlate(const char* img_path, std::string& result, bool is_outpu
             std::cout << "Reading cropped image " << crop_count++ << "..." << std::endl;
 
         // begin recognition
-        char recommend = '\0';
-        char recog = '\0';
-        std::map<char, double> possible_chars = jc.GetPossibleChars(char_mat, recommend, recog);
+        std::map<char, double> possible_chars = jc.GetPossibleChars(char_mat);
 
         // sort by cos values (descending)
         std::vector<std::pair<char, double> > possible_chars_vec(possible_chars.begin(), possible_chars.end());
@@ -58,18 +56,13 @@ int ProcessLicensePlate(const char* img_path, std::string& result, bool is_outpu
             }
         }
 
-        if (recog != '\0')
-        {
-            if (is_cout)
-                std::cout << std::endl << "Recognized as: " << recog;
-            result.append(1, recog);
-        }
-        else if (recommend != '\0')
-        {
-            if (is_cout)
-                std::cout << std::endl << "Recommend: " << recommend;
-            result.append(1, recommend);
-        }
+        char recommend = '?';
+        if (!possible_chars_vec.empty())
+            recommend = possible_chars_vec.front().first;
+
+        if (is_cout)
+            std::cout << std::endl << "Recommend: " << recommend;
+        result.append(1, recommend);
 
         if (is_cout)
             std::cout << std::endl << std::endl;

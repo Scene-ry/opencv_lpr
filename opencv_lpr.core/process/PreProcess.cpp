@@ -116,8 +116,8 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         }
 
         cv::dilate(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
-        cv::dilate(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
-        cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+        //cv::dilate(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+        //cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
     }
 
     if (is_output_img)

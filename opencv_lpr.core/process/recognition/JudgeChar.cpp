@@ -4,12 +4,11 @@ JudgeChar::JudgeChar() : fvec(CROP_WIDTH, CROP_HEIGHT)
 {
 }
 
-std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& recommend, char& recog)
+std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
 {
     std::map<char, double> res;
     if (mat.cols == 1 && mat.rows == 1)
     {
-        recommend = '1';
         res.insert(std::make_pair('1', 1.0));
         return res;
     }
@@ -18,8 +17,6 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
 
     std::vector<double> mat_vec_left, mat_vec_right, mat_vec_up, mat_vec_down;
     fvec.AddSampleDepthVector(mat, mat_vec_left, mat_vec_right, mat_vec_up, mat_vec_down);
-
-    double max_cos_value = 0;
 
     for (int i = 0; i < 36; i++)
     {
@@ -35,11 +32,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
         if (i >= 0 && i <= 9)
         {
             char_cos_values.insert(std::make_pair('0' + i, cos_value));
-            if (cos_value > max_cos_value)
-            {
-                recommend = '0' + i;
-                max_cos_value = cos_value;
-            }
+
             if (cos_value >= SIMILAR_THRESHOLD)
             {
                 res.insert(std::make_pair('0' + i, cos_value));
@@ -54,11 +47,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
         else
         {
             char_cos_values.insert(std::make_pair('A' + i - 10, cos_value));
-            if (cos_value > max_cos_value)
-            {
-                recommend = 'A' + i - 10;
-                max_cos_value = cos_value;
-            }
+
             if (cos_value >= SIMILAR_THRESHOLD)
             {
                 res.insert(std::make_pair('A' + i - 10, cos_value));
@@ -73,31 +62,35 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
     }
 
     // increase threshold until a char matches
-    max_cos_value = 0;
     for (double lower_th = SIMILAR_THRESHOLD - 0.01; res.size() <= 0; lower_th -= 0.01)
     {
         for (std::map<char, double>::iterator it = char_cos_values.begin(); it != char_cos_values.end(); it++)
         {
-            if (it->second > max_cos_value)
-            {
-                recommend = it->first;
-                max_cos_value = it->second;
-            }
             if (it->second >= lower_th)
                 res.insert(std::make_pair(it->first, it->second));
         }
     }
 
-    // distinguish '0' '8' 'D' 'Q'
-    if (recommend == '0' || recommend == '8' || recommend == 'Q')
+    // Exclude some chars
+    if (res.find('H') != res.end())
     {
-        Distinguish_0_8_Q(mat, recog);
+        //
     }
-
-    // distinguish '5' 'S'
-    if (recommend == '5' || recommend == 'S')
+    if (res.find('K') != res.end())
     {
-        Distinguish_5_S(mat, recog);
+        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'K');
+    }
+    if (res.find('M') != res.end())
+    {
+        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'M');
+    }
+    if (res.find('N') != res.end())
+    {
+        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'N');
+    }
+    if (res.find('X') != res.end())
+    {
+        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'X');
     }
 
     return res;

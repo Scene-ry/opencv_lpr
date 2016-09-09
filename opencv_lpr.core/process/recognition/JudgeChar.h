@@ -3,7 +3,7 @@
 
 #include "GetCos.h"
 #include "DepthVectorHelper.h"
-#include "Distinguishers.h"
+#include "CharExcluders.h"
 #include "std_depth_data.h"
 
 #include <map>
@@ -12,7 +12,7 @@ class JudgeChar
 {
 public:
     JudgeChar();
-    std::map<char, double> GetPossibleChars(const cv::Mat&, char&, char&);
+    std::map<char, double> GetPossibleChars(const cv::Mat&);
     std::map<char, std::vector<double> > four_directions;
 private:
     DepthVectorHelper fvec;
