@@ -18,7 +18,7 @@ double GetVectorCos(const std::vector<double>& v1, double* v2)
         denominator_r += v2[i] * v2[i];
     }
 
-    if (denominator_l != 0 && denominator_r != 0)
+    if (std::fabs(denominator_l) > 1e-23 && std::fabs(denominator_r) > 1e-23)
     {
         return numerator / (std::sqrt(denominator_l) * std::sqrt(denominator_r));
     }

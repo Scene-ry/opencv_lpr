@@ -2,10 +2,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-#define PLATE_CHAR_SIZE  8
 #else
 #include <dirent.h>
-#define PLATE_CHAR_SIZE  9
 #endif
 
 #define PLATE_RECOG_SIZE 6
@@ -49,6 +47,7 @@ int main()
 
     std::string img_path, crop_output_path, result_str;
     int correct_count = 0;
+    int total_count = 0;
     for (std::vector<std::string>::iterator it = plate_images.begin(); it != plate_images.end(); it++)
     {
         if ((*it).find(".jpg") == std::string::npos)
@@ -56,7 +55,7 @@ int main()
             continue;
         }
 
-        std::string plate_name = (*it).substr(0, PLATE_CHAR_SIZE);
+        std::string plate_name = (*it).substr(0, (*it).find_last_of('.'));
 
         img_path = std::string("./samples/images/") + (*it);
         crop_output_path = std::string("./samples/crops/") + plate_name;
@@ -104,6 +103,7 @@ int main()
             if (error_chars.empty())
                 correct_count++;
 
+            total_count++;
             std::cout << std::endl;
         }
         else
@@ -112,8 +112,8 @@ int main()
         }
     }
 
-    if (!plate_images.empty())
-        std::cout << "Correct rate: " << (correct_count / (double)plate_images.size() * 100) << "%" << std::endl;
+    if (total_count != 0)
+        std::cout << "Correct rate: " << (correct_count / (double)total_count * 100) << "%" << std::endl;
 
     return 0;
 }
