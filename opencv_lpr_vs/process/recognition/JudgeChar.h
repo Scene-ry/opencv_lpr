@@ -13,7 +13,7 @@ class JudgeChar
 public:
     JudgeChar();
     std::map<char, double> GetPossibleChars(const cv::Mat&, char&, char&);
-
+    std::map<char, std::vector<double> > four_directions;
 private:
     DepthVectorHelper fvec;
 };

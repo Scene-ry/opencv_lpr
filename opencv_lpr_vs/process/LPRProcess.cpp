@@ -48,6 +48,10 @@ int ProcessLicensePlate(const char* img_path, std::string& result, bool is_outpu
             for (std::vector<std::pair<char, double> >::iterator it = possible_chars_vec.begin(); it != possible_chars_vec.end();)
             {
                 std::cout << it->first << ": " << it->second;
+                if (jc.four_directions.find(it->first) != jc.four_directions.end())
+                {
+                    std::cout << " Left: " << jc.four_directions.at(it->first).at(0) << " Right: " << jc.four_directions.at(it->first).at(1) << " Up: " << jc.four_directions.at(it->first).at(2) << " Down: " << jc.four_directions.at(it->first).at(3);
+                }
                 if (++it == possible_chars_vec.end())
                     break;
                 std::cout << std::endl;

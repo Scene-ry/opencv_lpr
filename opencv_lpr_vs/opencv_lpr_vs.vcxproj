@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="process\Common.h" />
+    <ClInclude Include="process\DataGenerator.h" />
     <ClInclude Include="process\LPRProcess.h" />
     <ClInclude Include="process\PreProcess.h" />
     <ClInclude Include="process\preprocess\LicenseCropper.h" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="process\Common.cpp" />
+    <ClCompile Include="process\DataGenerator.cpp" />
     <ClCompile Include="process\LPRProcess.cpp" />
     <ClCompile Include="process\PreProcess.cpp" />
     <ClCompile Include="process\preprocess\LicenseCropper.cpp" />

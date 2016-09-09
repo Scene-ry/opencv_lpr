@@ -41,7 +41,15 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
                 max_cos_value = cos_value;
             }
             if (cos_value >= SIMILAR_THRESHOLD)
+            {
                 res.insert(std::make_pair('0' + i, cos_value));
+                std::vector<double> fdir;
+                fdir.push_back(cos_value_left);
+                fdir.push_back(cos_value_right);
+                fdir.push_back(cos_value_up);
+                fdir.push_back(cos_value_down);
+                four_directions.insert(std::make_pair('0' + i, fdir));
+            }
         }
         else
         {
@@ -52,7 +60,15 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat, char& rec
                 max_cos_value = cos_value;
             }
             if (cos_value >= SIMILAR_THRESHOLD)
+            {
                 res.insert(std::make_pair('A' + i - 10, cos_value));
+                std::vector<double> fdir;
+                fdir.push_back(cos_value_left);
+                fdir.push_back(cos_value_right);
+                fdir.push_back(cos_value_up);
+                fdir.push_back(cos_value_down);
+                four_directions.insert(std::make_pair('A' + i - 10, fdir));
+            }
         }
     }
 

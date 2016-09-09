@@ -14,7 +14,7 @@ void DepthVectorHelper::AddSampleDepthVector(const cv::Mat& mat, std::vector<dou
 
 void DepthVectorHelper::AddSampleDepthVectorLeft(const cv::Mat& mat, std::vector<double>& result)
 {
-    int h_incr = height / SAMPLE_COUNT;
+    int h_incr = height / VERTICAL_SAMPLE;
     bool isPushed;
 
 #ifdef __GET_EDGE_DATA__
@@ -46,7 +46,7 @@ void DepthVectorHelper::AddSampleDepthVectorLeft(const cv::Mat& mat, std::vector
 
 void DepthVectorHelper::AddSampleDepthVectorRight(const cv::Mat& mat, std::vector<double>& result)
 {
-    int h_incr = height / SAMPLE_COUNT;
+    int h_incr = height / VERTICAL_SAMPLE;
     bool isPushed;
 
 #ifdef __GET_EDGE_DATA__
@@ -78,7 +78,7 @@ void DepthVectorHelper::AddSampleDepthVectorRight(const cv::Mat& mat, std::vecto
 
 void DepthVectorHelper::AddSampleDepthVectorUp(const cv::Mat& mat, std::vector<double>& result)
 {
-    int w_incr = width / SAMPLE_COUNT;
+    int w_incr = width / HORIZONTAL_SAMPLE;
     bool isPushed;
 
 #ifdef __GET_EDGE_DATA__
@@ -110,7 +110,7 @@ void DepthVectorHelper::AddSampleDepthVectorUp(const cv::Mat& mat, std::vector<d
 
 void DepthVectorHelper::AddSampleDepthVectorDown(const cv::Mat& mat, std::vector<double>& result)
 {
-    int w_incr = width / SAMPLE_COUNT;
+    int w_incr = width / HORIZONTAL_SAMPLE;
     bool isPushed;
 
 #ifdef __GET_EDGE_DATA__

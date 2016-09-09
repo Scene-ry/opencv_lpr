@@ -9,7 +9,8 @@
 #define CROP_WIDTH        20
 #define CROP_HEIGHT       40
 
-#define SAMPLE_COUNT      10
+#define HORIZONTAL_SAMPLE 10
+#define VERTICAL_SAMPLE   20
 
 #define WHITE_THRESHOLD   80
 #define SIMILAR_THRESHOLD 0.88   // 0.88 recommended

@@ -1,4 +1,5 @@
 #include "process/LPRProcess.h"
+#include "process/DataGenerator.h"
 
 #ifdef _WIN32
 #include <Windows.h>
