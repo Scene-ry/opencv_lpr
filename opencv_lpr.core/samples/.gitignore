@@ -1,0 +1,3 @@
+/test
+/crops/*
+!/crops/.gitignore
