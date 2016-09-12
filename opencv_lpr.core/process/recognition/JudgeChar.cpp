@@ -90,7 +90,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     }
     if (res.find('N') != res.end())
     {
-        //
+        CharExcluders::ByWhitePixelUp_LeftRightRate(mat, res, 'N', false);  // last bool means to exclude chars with a smaller value
     }
     if (res.find('Q') != res.end())
     {
@@ -107,6 +107,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     if (res.find('X') != res.end())
     {
         CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'X');
+        CharExcluders::ByWhitePixelUp_LeftRightRate(mat, res, 'X', true);  // last bool means to exclude chars with a larger value
     }
     if (res.find('Y') != res.end())
     {

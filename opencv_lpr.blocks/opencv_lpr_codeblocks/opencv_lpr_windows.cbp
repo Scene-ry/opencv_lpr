@@ -177,8 +177,8 @@
 		<Unit filename="../../opencv_lpr.core/process/preprocess/LicenseCropper.h" />
 		<Unit filename="../../opencv_lpr.core/process/recognition/DepthVectorHelper.cpp" />
 		<Unit filename="../../opencv_lpr.core/process/recognition/DepthVectorHelper.h" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/Distinguishers.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/Distinguishers.h" />
+		<Unit filename="../../opencv_lpr.core/process/recognition/CharExcluders.cpp" />
+		<Unit filename="../../opencv_lpr.core/process/recognition/CharExcluders.h" />
 		<Unit filename="../../opencv_lpr.core/process/recognition/GetCos.cpp" />
 		<Unit filename="../../opencv_lpr.core/process/recognition/GetCos.h" />
 		<Unit filename="../../opencv_lpr.core/process/recognition/JudgeChar.cpp" />

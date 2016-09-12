@@ -12,7 +12,7 @@ void CharExcluders::ByWhitePointsOnHorizontalMediumLine(const cv::Mat& mat, std:
             white_pixel_points++;
     }
 
-    if (white_pixel_points >= 18)
+    if (white_pixel_points >= 18 && cos_result.find(to_remove) != cos_result.end())
         cos_result.erase(to_remove);
 }
 
@@ -30,7 +30,7 @@ void CharExcluders::ByWhiteAreasOnVerticalMediumLine(const cv::Mat& mat, std::ma
         last_pixel = pixel;
     }
 
-    if (white_area_count < 3)
+    if (white_area_count < 3 && cos_result.find(to_remove) != cos_result.end())
         cos_result.erase(to_remove);
 }
 
@@ -48,7 +48,7 @@ void CharExcluders::ByWhiteAreasOnHorizontal3_4Line(const cv::Mat& mat, std::map
         last_pixel = pixel;
     }
 
-    if (white_area_count > 1)
+    if (white_area_count > 1 && cos_result.find(to_remove) != cos_result.end())
         cos_result.erase(to_remove);
 }
 
@@ -79,7 +79,7 @@ void CharExcluders::ByWhiteAreasOnAllHorizontalLine(const cv::Mat& mat, std::map
         }
     }
 
-    if (h_with_one_white_area_start > 30)
+    if (h_with_one_white_area_start > 30 && cos_result.find(to_remove) != cos_result.end())
         cos_result.erase(to_remove);
 }
 
@@ -103,6 +103,42 @@ void CharExcluders::ByWhitePixelUpDownRate(const cv::Mat& mat, std::map<char, do
         }
     }
 
-    if (up_count - down_count < 10)
+    if (up_count - down_count < 10 && cos_result.find(to_remove) != cos_result.end())
         cos_result.erase(to_remove);
+}
+
+void CharExcluders::ByWhitePixelUp_LeftRightRate(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, bool isLarger)
+{
+    int height = mat.rows, width = mat.cols;
+    int left_count = 0, right_count = 0;
+
+    for (int h = 0; h < height / 2; h++)
+    {
+        for (int w = 0; w < width; w++)
+        {
+            int pixel = mat.at<uchar>(h, w);
+            if (pixel >= WHITE_THRESHOLD)
+            {
+                if (w < width / 2)
+                    left_count++;
+                else
+                    right_count++;
+            }
+        }
+    }
+
+    if (cos_result.find(to_remove) != cos_result.end())
+    {
+        if (isLarger)
+        {
+            if (abs(left_count - right_count) > 10)
+                cos_result.erase(to_remove);
+        }
+        else
+        {
+            if (abs(left_count - right_count) < 10)
+                cos_result.erase(to_remove);
+        }
+        
+    }
 }

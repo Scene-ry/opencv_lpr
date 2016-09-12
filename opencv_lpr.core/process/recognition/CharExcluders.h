@@ -2,6 +2,7 @@
 #define CHAR_EXCLUDERS_H
 
 #include "../Common.h"
+#include <cmath>
 #include <map>
 
 class CharExcluders
@@ -13,6 +14,7 @@ public:
     static void ByWhiteAreasOnAllHorizontalLine(const cv::Mat&, std::map<char, double>&, char);
 
     static void ByWhitePixelUpDownRate(const cv::Mat&, std::map<char, double>&, char);
+    static void ByWhitePixelUp_LeftRightRate(const cv::Mat&, std::map<char, double>&, char, bool);
 };
 
 #endif
