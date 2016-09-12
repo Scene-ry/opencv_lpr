@@ -86,11 +86,11 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     }
     if (res.find('M') != res.end())
     {
-        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'M');
+        CharExcluders::ByWhitePixelUpDownRate(mat, res, 'M');
     }
     if (res.find('N') != res.end())
     {
-        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'N');
+        //
     }
     if (res.find('Q') != res.end())
     {

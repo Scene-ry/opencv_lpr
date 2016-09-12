@@ -12,7 +12,7 @@ void CharExcluders::ByWhitePointsOnHorizontalMediumLine(const cv::Mat& mat, std:
             white_pixel_points++;
     }
 
-    if (white_pixel_points > 18)
+    if (white_pixel_points >= 18)
         cos_result.erase(to_remove);
 }
 
@@ -80,5 +80,29 @@ void CharExcluders::ByWhiteAreasOnAllHorizontalLine(const cv::Mat& mat, std::map
     }
 
     if (h_with_one_white_area_start > 30)
+        cos_result.erase(to_remove);
+}
+
+void CharExcluders::ByWhitePixelUpDownRate(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove)
+{
+    int height = mat.rows, width = mat.cols;
+    int up_count = 0, down_count = 0;
+
+    for (int h = 0; h < height; h++)
+    {
+        for (int w = 0; w < width; w++)
+        {
+            int pixel = mat.at<uchar>(h, w);
+            if (pixel >= WHITE_THRESHOLD)
+            {
+                if (h < height / 2)
+                    up_count++;
+                else
+                    down_count++;
+            }
+        }
+    }
+
+    if (up_count - down_count < 10)
         cos_result.erase(to_remove);
 }
