@@ -7,7 +7,10 @@
 class CharExcluders
 {
 public:
-    static void JudgeByHorizontalMediumLine(const cv::Mat&, std::map<char, double>&, char);
+    static void ByWhitePointsOnHorizontalMediumLine(const cv::Mat&, std::map<char, double>&, char);
+    static void ByWhiteAreasOnVerticalMediumLine(const cv::Mat&, std::map<char, double>&, char);
+    static void ByWhiteAreasOnHorizontal3_4Line(const cv::Mat&, std::map<char, double>&, char);
+    static void ByWhiteAreasOnAllHorizontalLine(const cv::Mat&, std::map<char, double>&, char);
 };
 
 #endif

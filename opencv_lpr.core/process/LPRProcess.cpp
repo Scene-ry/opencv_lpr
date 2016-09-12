@@ -34,6 +34,7 @@ int ProcessLicensePlate(const char* img_path, std::string& result, bool is_outpu
             std::cout << "Reading cropped image " << crop_count++ << "..." << std::endl;
 
         // begin recognition
+        jc.four_directions.clear();
         std::map<char, double> possible_chars = jc.GetPossibleChars(char_mat);
 
         // sort by cos values (descending)

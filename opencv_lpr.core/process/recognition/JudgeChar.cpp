@@ -72,25 +72,45 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     }
 
     // Exclude some chars
+    if (res.find('3') != res.end())
+    {
+        //
+    }
     if (res.find('H') != res.end())
     {
         //
     }
     if (res.find('K') != res.end())
     {
-        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'K');
+        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'K');
     }
     if (res.find('M') != res.end())
     {
-        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'M');
+        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'M');
     }
     if (res.find('N') != res.end())
     {
-        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'N');
+        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'N');
+    }
+    if (res.find('Q') != res.end())
+    {
+        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, 'Q');
+    }
+    if (res.find('S') != res.end())
+    {
+        //
+    }
+    if (res.find('V') != res.end())
+    {
+        CharExcluders::ByWhiteAreasOnAllHorizontalLine(mat, res, 'V');
     }
     if (res.find('X') != res.end())
     {
-        CharExcluders::JudgeByHorizontalMediumLine(mat, res, 'X');
+        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'X');
+    }
+    if (res.find('Y') != res.end())
+    {
+        CharExcluders::ByWhiteAreasOnHorizontal3_4Line(mat, res, 'Y');
     }
 
     return res;
