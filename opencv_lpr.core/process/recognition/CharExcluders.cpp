@@ -111,6 +111,9 @@ void CharExcluders::ByWhitePixelUp_LeftRightRate(const cv::Mat& mat, std::map<ch
 
     for (cv::MatConstIterator_<uchar> it = mat.begin<uchar>(); it != mat.end<uchar>(); ++it)
     {
+        if (it.pos().y >= mat.rows / 2)
+            break;
+
         int pixel = *it;
         if (pixel >= WHITE_THRESHOLD)
         {
