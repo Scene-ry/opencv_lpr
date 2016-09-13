@@ -51,9 +51,13 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
 
     // Get the License
     cv::Mat src_license;
-    GetLicense(src, src_license);
-    cv::imwrite((std::string(output_img_path) + "canny.jpg").c_str(), src_license);
-    return ProcessResult::Failed; // end here for test
+    GetLicense(src, src_license, is_output_img, output_img_path);
+    if (is_output_img)
+    {
+        std::string s_filename = std::string(output_img_path) + "_license.jpg";
+        cv::imwrite(s_filename.c_str(), src_license);
+    }
+    //return ProcessResult::Failed; // end here for test
 
     // convert to 1-channel
     cv::Mat src_onechannel = cv::Mat::zeros(src_license.size(), CV_8UC1);
@@ -89,13 +93,19 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
 
     if (is_output_img)
     {
-        std::string s_filename = std::string(output_img_path) + "binary.jpg";
+        std::string s_filename = std::string(output_img_path) + "_binary.jpg";
         cv::imwrite(s_filename.c_str(), src_enhance);
     }
 
-    if (src_enhance.rows >= 50)
+    if (src_enhance.rows >= 45)
     {
         cv::erode(src_enhance, src_enhance, cv::Mat(cv::Size(3, 3), CV_8U));
+
+        if (is_output_img)
+        {
+            std::string s_filename = std::string(output_img_path) + "_erode.jpg";
+            cv::imwrite(s_filename.c_str(), src_enhance);
+        }
 
         // remove small areas
         std::vector<cv::Mat> contours;
@@ -104,7 +114,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         {
             cv::Rect r = boundingRect(*it);
 
-            if (!(r.width >= 1 && r.height >= src_enhance.rows / 2))
+            if (!(r.width > 2 && r.height >= src_enhance.rows / 2))
             {
                 for (int h = r.y; h < r.y + r.height; h++)
                 {
@@ -123,7 +133,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
 
     if (is_output_img)
     {
-        std::string s_filename = std::string(output_img_path) + "openclose.jpg";
+        std::string s_filename = std::string(output_img_path) + "_openclose.jpg";
         cv::imwrite(s_filename.c_str(), src_enhance);
     }
 
@@ -133,7 +143,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     //imwrite("./samples/crops/test_crop.jpg", src_crop);
 
     // get the contours
-    int char_max_width = 1;
+    int char_max_width = 2;
     int char_max_height = src_crop.rows / 2;
     std::vector<cv::Mat> contours;
     cv::findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
@@ -146,7 +156,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     {
         cv::Rect r = boundingRect(*it);
         // only store large contours
-        if (r.width >= char_max_width && r.height >= char_max_height)
+        if (r.width > char_max_width && r.height >= char_max_height)
         {
             rects.push_back(r);
         }

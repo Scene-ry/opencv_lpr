@@ -1,9 +1,7 @@
 #include "GetLicenseFromImage.h"
 
-void GetLicense(const cv::Mat& src, cv::Mat& dst)
+void GetLicense(const cv::Mat& src, cv::Mat& dst, bool is_output_img, const char* output_img_path)
 {
-    int h_threshold = 20, w_threshold = 20;
-
     // convert to gray
     cv::Mat src_hsv;
     cv::cvtColor(src, src_hsv, CV_BGR2HSV);
@@ -23,12 +21,26 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst)
     }
 
     // blur
-    //cv::blur(filter_hsv, filter_hsv, cv::Size(9, 9));
+    cv::blur(filter_hsv, filter_hsv, cv::Size(5, 5));
+
+    // th
+    cv::threshold(filter_hsv, filter_hsv, WHITE_THRESHOLD, 255, cv::THRESH_BINARY);
+
+    if (is_output_img)
+    {
+        std::string s_filename = std::string(output_img_path) + "_hsvfilter.jpg";
+        cv::imwrite(s_filename.c_str(), filter_hsv);
+    }
 
     // get edge
     cv::Mat filter_edge;
     cv::Canny(filter_hsv, filter_edge, 10, 90, 3);
-    //cv::imwrite("../../opencv_lpr.core/samples/crops/canny.jpg", filter_edge);
+
+    if (is_output_img)
+    {
+        std::string s_filename = std::string(output_img_path) + "_canny.jpg";
+        cv::imwrite(s_filename.c_str(), filter_edge);
+    }
 
     // construct histogram
     int *vertical_hist = new int[filter_edge.rows];
@@ -44,6 +56,25 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst)
             horizontal_hist[it.pos().x]++;
         }
     }
+
+    // get average
+    int h_max = 0, h_min = INT_MAX, w_max = 0, w_min = INT_MAX;
+    for (int i = 0; i < filter_edge.rows; i++)
+    {
+        if (vertical_hist[i] > h_max)
+            h_max = vertical_hist[i];
+        if (vertical_hist[i] < h_min)
+            h_min = vertical_hist[i];
+    }
+    for (int i = 0; i < filter_edge.cols; i++)
+    {
+        if (horizontal_hist[i] > w_max)
+            w_max = horizontal_hist[i];
+        if (horizontal_hist[i] < w_min)
+            w_min = horizontal_hist[i];
+    }
+
+    int h_threshold = (h_min + h_max) / 2, w_threshold = (w_min + w_max) / 2;
 
     // locate the plate
     int h_start = -1, h_end = -1, w_start = -1, w_end = -1;

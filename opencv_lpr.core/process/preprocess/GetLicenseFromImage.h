@@ -3,6 +3,6 @@
 
 #include "../Common.h"
 
-void GetLicense(const cv::Mat&, cv::Mat&);
+void GetLicense(const cv::Mat&, cv::Mat&, bool, const char*);
 
 #endif
