@@ -85,6 +85,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>D:\wuja6_Projects\Projects\Includes\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VS_PROJECT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +126,7 @@
     <ClInclude Include="..\..\opencv_lpr.core\process\DataGenerator.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\LPRProcess.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\PreProcess.h" />
+    <ClInclude Include="..\..\opencv_lpr.core\process\preprocess\GetLicenseFromImage.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\preprocess\LicenseCropper.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\CharExcluders.h" />
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\DepthVectorHelper.h" />
@@ -138,6 +140,7 @@
     <ClCompile Include="..\..\opencv_lpr.core\process\DataGenerator.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\LPRProcess.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\PreProcess.cpp" />
+    <ClCompile Include="..\..\opencv_lpr.core\process\preprocess\GetLicenseFromImage.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\preprocess\LicenseCropper.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\CharExcluders.cpp" />
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\DepthVectorHelper.cpp" />

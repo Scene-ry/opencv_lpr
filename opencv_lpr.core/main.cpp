@@ -7,6 +7,12 @@
 #include <dirent.h>
 #endif
 
+#ifdef VS_PROJECT
+#define WORKING_DIR      "../../opencv_lpr.core/samples/"
+#elif CODEBLOCKS_PROJECT
+#define WORKING_DIR      "../opencv_lpr.core/samples/"
+#endif
+
 #define PLATE_RECOG_SIZE 6
 
 int main()
@@ -14,10 +20,14 @@ int main()
     std::vector<std::string> plate_images;
     std::vector<std::string> error_chars;
 
+    std::string img_dir = std::string(WORKING_DIR) + "img_cars/";
+    std::string crops_dir = std::string(WORKING_DIR) + "crops/";
+
 #ifdef _WIN32
+    std::string img_dir_star = img_dir + "*";
     WIN32_FIND_DATA search_data;
     memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
-    HANDLE handle = FindFirstFile("../../opencv_lpr.core/samples/images/*", &search_data);
+    HANDLE handle = FindFirstFile(img_dir_star.c_str(), &search_data);
 
     while (handle != INVALID_HANDLE_VALUE)
     {
@@ -32,7 +42,7 @@ int main()
 #else
     DIR *dir;
     struct dirent *ent;
-    if ((dir = opendir("../../opencv_lpr.core/samples/images/")) != 0)
+    if ((dir = opendir(img_dir.c_str())) != 0)
     {
         while ((ent = readdir(dir)) != 0)
         {
@@ -58,8 +68,8 @@ int main()
 
         std::string plate_name = (*it).substr(0, (*it).find_last_of('.'));
 
-        img_path = std::string("../../opencv_lpr.core/samples/images/") + (*it);
-        crop_output_path = std::string("../../opencv_lpr.core/samples/crops/") + plate_name;
+        img_path = img_dir + (*it);
+        crop_output_path = crops_dir + plate_name;
         result_str = "";
 
         /**

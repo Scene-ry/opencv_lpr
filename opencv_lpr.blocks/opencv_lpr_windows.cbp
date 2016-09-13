@@ -15,9 +15,10 @@
 					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-D_WIN32" />
-					<Add directory="../../opencv_lpr.core/process/" />
-					<Add directory="../../opencv_lpr.core/process/recognition" />
-					<Add directory="../../opencv_lpr.core/process" />
+					<Add option="-DCODEBLOCKS_PROJECT" />
+					<Add directory="../opencv_lpr.core/process/" />
+					<Add directory="../opencv_lpr.core/process/recognition" />
+					<Add directory="../opencv_lpr.core/process" />
 					<Add directory="D:/opencv/include" />
 					<Add directory="D:/opencv/lib" />
 				</Compiler>
@@ -92,9 +93,11 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-O2" />
-					<Add directory="../../opencv_lpr.core/process/" />
-					<Add directory="../../opencv_lpr.core/process/recognition" />
-					<Add directory="../../opencv_lpr.core/process" />
+					<Add option="-D_WIN32" />
+					<Add option="-DCODEBLOCKS_PROJECT" />
+					<Add directory="../opencv_lpr.core/process/" />
+					<Add directory="../opencv_lpr.core/process/recognition" />
+					<Add directory="../opencv_lpr.core/process" />
 					<Add directory="D:/opencv/include" />
 					<Add directory="D:/opencv/lib" />
 				</Compiler>
@@ -166,25 +169,27 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../../opencv_lpr.core/main.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/Common.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/Common.h" />
-		<Unit filename="../../opencv_lpr.core/process/LPRProcess.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/LPRProcess.h" />
-		<Unit filename="../../opencv_lpr.core/process/PreProcess.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/PreProcess.h" />
-		<Unit filename="../../opencv_lpr.core/process/preprocess/LicenseCropper.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/preprocess/LicenseCropper.h" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/DepthVectorHelper.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/DepthVectorHelper.h" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/CharExcluders.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/CharExcluders.h" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/GetCos.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/GetCos.h" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/JudgeChar.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/JudgeChar.h" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/std_depth_data.cpp" />
-		<Unit filename="../../opencv_lpr.core/process/recognition/std_depth_data.h" />
+		<Unit filename="../opencv_lpr.core/main.cpp" />
+		<Unit filename="../opencv_lpr.core/process/Common.cpp" />
+		<Unit filename="../opencv_lpr.core/process/Common.h" />
+		<Unit filename="../opencv_lpr.core/process/LPRProcess.cpp" />
+		<Unit filename="../opencv_lpr.core/process/LPRProcess.h" />
+		<Unit filename="../opencv_lpr.core/process/PreProcess.cpp" />
+		<Unit filename="../opencv_lpr.core/process/PreProcess.h" />
+		<Unit filename="../opencv_lpr.core/process/preprocess/GetLicenseFromImage.cpp" />
+		<Unit filename="../opencv_lpr.core/process/preprocess/GetLicenseFromImage.h" />
+		<Unit filename="../opencv_lpr.core/process/preprocess/LicenseCropper.cpp" />
+		<Unit filename="../opencv_lpr.core/process/preprocess/LicenseCropper.h" />
+		<Unit filename="../opencv_lpr.core/process/recognition/CharExcluders.cpp" />
+		<Unit filename="../opencv_lpr.core/process/recognition/CharExcluders.h" />
+		<Unit filename="../opencv_lpr.core/process/recognition/DepthVectorHelper.cpp" />
+		<Unit filename="../opencv_lpr.core/process/recognition/DepthVectorHelper.h" />
+		<Unit filename="../opencv_lpr.core/process/recognition/GetCos.cpp" />
+		<Unit filename="../opencv_lpr.core/process/recognition/GetCos.h" />
+		<Unit filename="../opencv_lpr.core/process/recognition/JudgeChar.cpp" />
+		<Unit filename="../opencv_lpr.core/process/recognition/JudgeChar.h" />
+		<Unit filename="../opencv_lpr.core/process/recognition/std_depth_data.cpp" />
+		<Unit filename="../opencv_lpr.core/process/recognition/std_depth_data.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

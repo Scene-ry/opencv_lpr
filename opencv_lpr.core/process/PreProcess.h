@@ -1,6 +1,7 @@
 #ifndef PREPROCESS_H
 #define PREPROCESS_H
 
+#include "preprocess/GetLicenseFromImage.h"
 #include "preprocess/LicenseCropper.h"
 
 #include <algorithm>

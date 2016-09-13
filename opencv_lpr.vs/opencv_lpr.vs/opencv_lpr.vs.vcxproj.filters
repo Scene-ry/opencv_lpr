@@ -45,6 +45,9 @@
     <ClInclude Include="..\..\opencv_lpr.core\process\recognition\CharExcluders.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\opencv_lpr.core\process\preprocess\GetLicenseFromImage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\opencv_lpr.core\process\Common.cpp">
@@ -78,6 +81,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\opencv_lpr.core\process\recognition\CharExcluders.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\opencv_lpr.core\process\preprocess\GetLicenseFromImage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

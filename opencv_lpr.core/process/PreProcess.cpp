@@ -54,14 +54,20 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         return ProcessResult::Failed;
     }
 
+    // Get the License
+    cv::Mat src_license;
+    GetLicense(src, src_license);
+    cv::imwrite((std::string(output_img_path) + "canny.jpg").c_str(), src_license);
+    return ProcessResult::Failed; // end here for test
+
     // convert to 1-channel
-    cv::Mat src_onechannel = cv::Mat::zeros(src.size(), CV_8UC1);
+    cv::Mat src_onechannel = cv::Mat::zeros(src_license.size(), CV_8UC1);
 
     // convert to gray
-    cv::cvtColor(src, src_onechannel, CV_BGR2GRAY);
+    cv::cvtColor(src_license, src_onechannel, CV_BGR2GRAY);
     //imwrite("./samples/crops/gray.jpg", src_onechannel);
 
-    // Enhancement
+    // Enhancement (not using any yet)
     cv::Mat src_enhance;
     src_enhance = src_onechannel;
     //cv::equalizeHist(src_onechannel, src_enhance);
