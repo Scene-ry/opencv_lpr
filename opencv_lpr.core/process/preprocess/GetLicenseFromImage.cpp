@@ -8,18 +8,15 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst)
 
     // filter
     cv::Mat filter_hsv = cv::Mat::zeros(src_hsv.size(), CV_8UC1);
-    for (int h = 0; h < src_hsv.rows; h++)
+    for (cv::MatIterator_<cv::Vec3b> it = src_hsv.begin<cv::Vec3b>(); it != src_hsv.end<cv::Vec3b>(); ++it)
     {
-        for (int w = 0; w < src_hsv.cols; w++)
-        {
-            double pixel_h = src_hsv.at<cv::Vec3b>(h, w)[0] * 2.0;
-            double pixel_s = src_hsv.at<cv::Vec3b>(h, w)[1] / 255.0;
-            double pixel_v = src_hsv.at<cv::Vec3b>(h, w)[2] / 255.0;
+        double pixel_h = (*it)[0] * 2.0;
+        double pixel_s = (*it)[1] / 255.0;
+        double pixel_v = (*it)[2] / 255.0;
 
-            if (pixel_h >= 190 && pixel_h <= 245 && pixel_s >= 0.35 && pixel_v >= 0.3)
-            {
-                filter_hsv.at<uchar>(h, w) = 255;
-            }
+        if (pixel_h >= 190 && pixel_h <= 245 && pixel_s >= 0.35 && pixel_v >= 0.3)
+        {
+            filter_hsv.at<uchar>(it.pos()) = 255;
         }
     }
 
@@ -29,8 +26,4 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst)
     // get edge
     cv::Canny(filter_hsv, dst, 10, 90, 3);
 
-    for (cv::MatIterator_<uchar> it = filter_hsv.begin<uchar>(); it != filter_hsv.end<uchar>(); ++it)
-    {
-        
-    }
 }

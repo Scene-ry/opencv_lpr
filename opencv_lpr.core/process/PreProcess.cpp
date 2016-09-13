@@ -15,13 +15,10 @@ int binarize_by_histogram(const cv::Mat& src)
 {
     int hist[256] = {0};
 
-    for (int h = 0; h < src.rows; h++)
+    for (cv::MatConstIterator_<uchar> it = src.begin<uchar>(); it != src.end<uchar>(); ++it)
     {
-        for (int w = 0; w < src.cols; w++)
-        {
-            int pixel = (int)src.at<uchar>(h, w);
-            hist[pixel]++;
-        }
+        int pixel = *it;
+        hist[pixel]++;
     }
 
     return GetMeanThreshold(hist);
@@ -30,14 +27,12 @@ int binarize_by_histogram(const cv::Mat& src)
 void reverse_if_needed(cv::Mat& src)
 {
     int white_count = 0;
-    for (int h = 0; h < src.rows; h++)
+
+    for (cv::MatIterator_<uchar> it = src.begin<uchar>(); it != src.end<uchar>(); ++it)
     {
-        for (int w = 0; w < src.cols; w++)
-        {
-            int pixel = (int)src.at<uchar>(h, w);
-            if (pixel >= WHITE_THRESHOLD)
-                white_count++;
-        }
+        int pixel = *it;
+        if (pixel >= WHITE_THRESHOLD)
+            white_count++;
     }
 
     if (white_count / (double)(src.rows * src.cols) > 0.5)

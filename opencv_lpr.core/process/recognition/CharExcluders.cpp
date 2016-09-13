@@ -88,18 +88,15 @@ void CharExcluders::ByWhitePixelUpDownRate(const cv::Mat& mat, std::map<char, do
     int height = mat.rows, width = mat.cols;
     int up_count = 0, down_count = 0;
 
-    for (int h = 0; h < height; h++)
+    for (cv::MatConstIterator_<uchar> it = mat.begin<uchar>(); it != mat.end<uchar>(); ++it)
     {
-        for (int w = 0; w < width; w++)
+        int pixel = *it;
+        if (pixel >= WHITE_THRESHOLD)
         {
-            int pixel = mat.at<uchar>(h, w);
-            if (pixel >= WHITE_THRESHOLD)
-            {
-                if (h < height / 2)
-                    up_count++;
-                else
-                    down_count++;
-            }
+            if (it.pos().y < height / 2)
+                up_count++;
+            else
+                down_count++;
         }
     }
 
@@ -112,18 +109,15 @@ void CharExcluders::ByWhitePixelUp_LeftRightRate(const cv::Mat& mat, std::map<ch
     int height = mat.rows, width = mat.cols;
     int left_count = 0, right_count = 0;
 
-    for (int h = 0; h < height / 2; h++)
+    for (cv::MatConstIterator_<uchar> it = mat.begin<uchar>(); it != mat.end<uchar>(); ++it)
     {
-        for (int w = 0; w < width; w++)
+        int pixel = *it;
+        if (pixel >= WHITE_THRESHOLD)
         {
-            int pixel = mat.at<uchar>(h, w);
-            if (pixel >= WHITE_THRESHOLD)
-            {
-                if (w < width / 2)
-                    left_count++;
-                else
-                    right_count++;
-            }
+            if (it.pos().x < width / 2)
+                left_count++;
+            else
+                right_count++;
         }
     }
 
@@ -139,6 +133,6 @@ void CharExcluders::ByWhitePixelUp_LeftRightRate(const cv::Mat& mat, std::map<ch
             if (abs(left_count - right_count) < 10)
                 cos_result.erase(to_remove);
         }
-        
+
     }
 }
