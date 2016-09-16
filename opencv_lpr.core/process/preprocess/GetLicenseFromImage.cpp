@@ -14,6 +14,7 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst, bool is_output_img, const char
         double pixel_s = (*it)[1] / 255.0;
         double pixel_v = (*it)[2] / 255.0;
 
+        // select particular hsv pixels
         if (pixel_h >= 190 && pixel_h <= 245 && pixel_s >= 0.35 && pixel_v >= 0.3)
         {
             filter_hsv.at<uchar>(it.pos()) = 255;

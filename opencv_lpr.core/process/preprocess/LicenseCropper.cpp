@@ -8,7 +8,8 @@ void LicenseCropper(const cv::Mat& src, cv::Mat& dst)
     int white_area_count;
     int last_pixel;
 
-    for (int h = 0; h < height; h++)
+    bool up_edge_found = false;
+    for (int h = 0; h < height / 2; h++)
     {
         white_area_count = 0;
         last_pixel = 0;
@@ -22,13 +23,19 @@ void LicenseCropper(const cv::Mat& src, cv::Mat& dst)
             last_pixel = pixel;
         }
 
-        if (white_area_count > 5 && h_start == 0)
+        if (white_area_count > 5 && !up_edge_found)
         {
             h_start = h;
-            break;
+            up_edge_found = true;
+        }
+        else if (white_area_count <= 5)
+        {
+            up_edge_found = false;
         }
     }
-    for (int h = height - 1; h >= 0; h--)
+
+    bool down_edge_found = false;
+    for (int h = height - 1; h >= height / 2; h--)
     {
         white_area_count = 0;
         last_pixel = 0;
@@ -42,14 +49,22 @@ void LicenseCropper(const cv::Mat& src, cv::Mat& dst)
             last_pixel = pixel;
         }
 
-        if (white_area_count > 5 && h_end == height)
+        if (white_area_count > 5 && !down_edge_found)
         {
             h_end = h + 1;
             if (h_end > height)
                 h_end = height;
-            break;
+            down_edge_found = true;
+        }
+        else if (white_area_count <= 5)
+        {
+            down_edge_found = false;
         }
     }
+
+    // prevent left & right edges (test)
+    w_start += 5;
+    w_end -= 5;
 
     cv::Range rg_row, rg_col;
     rg_row.start = h_start;

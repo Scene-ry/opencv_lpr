@@ -114,7 +114,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         {
             cv::Rect r = boundingRect(*it);
 
-            if (!(r.width > 2 && r.height >= src_enhance.rows / 2))
+            if (!(r.width > 2 && r.height >= src_enhance.rows / 3))
             {
                 for (int h = r.y; h < r.y + r.height; h++)
                 {
@@ -142,9 +142,15 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     LicenseCropper(src_enhance, src_crop);
     //imwrite("./samples/crops/test_crop.jpg", src_crop);
 
+    if (is_output_img)
+    {
+        std::string s_filename = std::string(output_img_path) + "_cropped.jpg";
+        cv::imwrite(s_filename.c_str(), src_crop);
+    }
+
     // get the contours
-    int char_max_width = 2;
-    int char_max_height = src_crop.rows / 2;
+    int contour_max_width = 2;
+    int contour_max_height = src_crop.rows / 2;
     std::vector<cv::Mat> contours;
     cv::findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
@@ -156,7 +162,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     {
         cv::Rect r = boundingRect(*it);
         // only store large contours
-        if (r.width > char_max_width && r.height >= char_max_height)
+        if (r.width > contour_max_width && r.height >= contour_max_height && r.height / (double)r.width >= 1.2)
         {
             rects.push_back(r);
         }
