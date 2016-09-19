@@ -72,9 +72,9 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     }
 
     // Exclude some chars
-    if (res.find('3') != res.end())
+    if (res.find('8') != res.end())
     {
-        //
+        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, '8');
     }
     if (res.find('H') != res.end())
     {

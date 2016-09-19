@@ -20,10 +20,11 @@ int main()
     std::vector<std::string> plate_images;
     std::vector<std::string> error_chars;
 
-    std::string img_dir = std::string(WORKING_DIR) + "img_cars/failed/left_and_right_edge_not_excluded/";
+    //std::string img_dir = std::string(WORKING_DIR) + "img_cars/failed/left_and_right_edge_not_excluded/";
     //std::string img_dir = std::string(WORKING_DIR) + "img_cars/";
-    //std::string img_dir = std::string(WORKING_DIR) + "img_cars/success/";
+    std::string img_dir = std::string(WORKING_DIR) + "img_cars/success/";
     //std::string img_dir = std::string(WORKING_DIR) + "img_plates/";
+    //std::string img_dir = std::string(WORKING_DIR) + "test/";
     std::string crops_dir = std::string(WORKING_DIR) + "crops/";
 
 #ifdef _WIN32
@@ -86,7 +87,7 @@ int main()
         int result_value = ProcessLicensePlate(
             img_path.c_str(),
             result_str,
-            true,
+            false,
             false,
             crop_output_path.c_str()
             );
