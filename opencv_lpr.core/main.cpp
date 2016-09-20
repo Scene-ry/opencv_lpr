@@ -20,7 +20,7 @@ int main()
     std::vector<std::string> plate_images;
     std::vector<std::string> error_chars;
 
-    //std::string img_dir = std::string(WORKING_DIR) + "img_cars/failed/left_and_right_edge_not_excluded/";
+    //std::string img_dir = std::string(WORKING_DIR) + "img_cars/failed/binary_nogood/";
     //std::string img_dir = std::string(WORKING_DIR) + "img_cars/";
     std::string img_dir = std::string(WORKING_DIR) + "img_cars/success/";
     //std::string img_dir = std::string(WORKING_DIR) + "img_plates/";

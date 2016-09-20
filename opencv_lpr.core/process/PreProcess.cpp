@@ -18,7 +18,9 @@ int binarize_by_histogram(const cv::Mat& src)
     for (cv::MatConstIterator_<uchar> it = src.begin<uchar>(); it != src.end<uchar>(); ++it)
     {
         int pixel = *it;
-        hist[pixel]++;
+        // only available for white chars
+        if (pixel > 50)
+            hist[pixel]++;
     }
 
     return GetMeanThreshold(hist);
@@ -114,7 +116,7 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
         {
             cv::Rect r = boundingRect(*it);
 
-            if (!(r.width > 2 && r.height >= src_enhance.rows / 3))
+            if (r.height < src_enhance.rows / 3)
             {
                 for (int h = r.y; h < r.y + r.height; h++)
                 {
@@ -149,8 +151,6 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     }
 
     // get the contours
-    int contour_max_width = 2;
-    int contour_max_height = src_crop.rows / 2;
     std::vector<cv::Mat> contours;
     cv::findContours(src_crop.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
@@ -162,7 +162,8 @@ ProcessResult pre_process(const char* img_path, std::vector<cv::Mat>& split_char
     {
         cv::Rect r = boundingRect(*it);
         // only store large contours
-        if (r.width > contour_max_width && r.height >= contour_max_height && r.height / (double)r.width >= 1.2)
+        double h_w_rate = r.height / (double)r.width;
+        if (r.height >= src_crop.rows / 2 && h_w_rate >= 1.2 && r.x / (double)src_crop.cols < 0.95)
         {
             rects.push_back(r);
         }
