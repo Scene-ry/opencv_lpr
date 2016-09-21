@@ -7,25 +7,12 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst, bool is_output_img, const char
     cv::cvtColor(src, src_hsv, CV_BGR2HSV);
 
     // filter
-    cv::Mat filter_hsv = cv::Mat::zeros(src_hsv.size(), CV_8UC1);
-    for (cv::MatIterator_<cv::Vec3b> it = src_hsv.begin<cv::Vec3b>(); it != src_hsv.end<cv::Vec3b>(); ++it)
-    {
-        double pixel_h = (*it)[0] * 2.0;
-        double pixel_s = (*it)[1] / 255.0;
-        double pixel_v = (*it)[2] / 255.0;
-
-        // select particular hsv pixels
-        if (pixel_h >= 190 && pixel_h <= 245 && pixel_s >= 0.35 && pixel_v >= 0.25)
-        {
-            filter_hsv.at<uchar>(it.pos()) = 255;
-        }
-    }
-
-    // blur
-    cv::blur(filter_hsv, filter_hsv, cv::Size(5, 5));
-
-    // th
-    cv::threshold(filter_hsv, filter_hsv, WHITE_THRESHOLD, 255, cv::THRESH_BINARY);
+    cv::Mat filter_min(src_hsv.size(), CV_8UC3, cv::Scalar(95, 60, 60));
+    cv::Mat filter_max(src_hsv.size(), CV_8UC3, cv::Scalar(123, 255, 255));
+    cv::Mat filter_between = (src_hsv >= filter_min) & (src_hsv <= filter_max);
+    cv::Mat filter_hsv = cv::Mat::zeros(filter_between.size(), CV_8UC1);
+    cv::cvtColor(filter_between, filter_hsv, CV_BGR2GRAY);
+    cv::threshold(filter_hsv, filter_hsv, 254, 255, CV_THRESH_BINARY);
 
     if (is_output_img)
     {
@@ -33,8 +20,13 @@ void GetLicense(const cv::Mat& src, cv::Mat& dst, bool is_output_img, const char
         cv::imwrite(s_filename.c_str(), filter_hsv);
     }
 
-    cv::dilate(filter_hsv, filter_hsv, cv::Mat(cv::Size(5, 5), CV_8U));
+    // blur + th
+    cv::blur(filter_hsv, filter_hsv, cv::Size(10, 10));
+    cv::threshold(filter_hsv, filter_hsv, WHITE_THRESHOLD, 255, CV_THRESH_BINARY);
+
+    cv::dilate(filter_hsv, filter_hsv, cv::Mat(cv::Size(3, 3), CV_8U));
     //cv::erode(filter_hsv, filter_hsv, cv::Mat(cv::Size(5, 5), CV_8U));
+
     if (is_output_img)
     {
         std::string s_filename = std::string(output_img_path) + "_hsvfilter_dilate.jpg";
