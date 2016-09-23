@@ -74,7 +74,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     // Exclude some chars
     if (res.find('8') != res.end())
     {
-        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, '8');
+        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, '8', NumComparer::Smaller, 3);
     }
     if (res.find('H') != res.end())
     {
@@ -82,19 +82,23 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     }
     if (res.find('K') != res.end())
     {
-        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'K');
+        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'K', NumComparer::Larger, 18);
     }
     if (res.find('M') != res.end())
     {
-        CharExcluders::ByWhitePixelUpDownRate(mat, res, 'M');
+        CharExcluders::ByWhitePixelUpDownDiff(mat, res, 'M', NumComparer::Smaller, 10);
     }
     if (res.find('N') != res.end())
     {
-        CharExcluders::ByWhitePixelUp_LeftRightRate(mat, res, 'N', false);  // last bool means to exclude chars with a smaller value
+        CharExcluders::ByWhitePixelUp_LeftRightDiff(mat, res, 'N', NumComparer::Smaller, 12);
+    }
+    if (res.find('P') != res.end())
+    {
+        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, 'P', NumComparer::Larger, 2);
     }
     if (res.find('Q') != res.end())
     {
-        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, 'Q');
+        CharExcluders::ByWhiteAreasOnVerticalMediumLine(mat, res, 'Q', NumComparer::Smaller, 3);
     }
     if (res.find('S') != res.end())
     {
@@ -102,16 +106,16 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     }
     if (res.find('V') != res.end())
     {
-        CharExcluders::ByWhiteAreasOnAllHorizontalLine(mat, res, 'V');
+        CharExcluders::ByOneWhiteAreaStartHorizontalLine(mat, res, 'V', NumComparer::Larger, 30);
     }
     if (res.find('X') != res.end())
     {
-        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'X');
-        CharExcluders::ByWhitePixelUp_LeftRightRate(mat, res, 'X', true);  // last bool means to exclude chars with a larger value
+        CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'X', NumComparer::Larger, 18);
+        CharExcluders::ByWhitePixelUp_LeftRightDiff(mat, res, 'X', NumComparer::Smaller, 12);
     }
     if (res.find('Y') != res.end())
     {
-        CharExcluders::ByWhiteAreasOnHorizontal3_4Line(mat, res, 'Y');
+        CharExcluders::ByWhiteAreasOnHorizontal3_4Line(mat, res, 'Y', NumComparer::Larger, 1);
     }
 
     return res;

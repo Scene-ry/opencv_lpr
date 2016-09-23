@@ -5,16 +5,21 @@
 #include <cmath>
 #include <map>
 
+enum NumComparer
+{
+    Larger, Equal, Smaller
+};
+
 class CharExcluders
 {
 public:
-    static void ByWhitePointsOnHorizontalMediumLine(const cv::Mat&, std::map<char, double>&, char);
-    static void ByWhiteAreasOnVerticalMediumLine(const cv::Mat&, std::map<char, double>&, char);
-    static void ByWhiteAreasOnHorizontal3_4Line(const cv::Mat&, std::map<char, double>&, char);
-    static void ByWhiteAreasOnAllHorizontalLine(const cv::Mat&, std::map<char, double>&, char);
+    static void ByWhitePointsOnHorizontalMediumLine(const cv::Mat&, std::map<char, double>&, char, NumComparer, int);
+    static void ByWhiteAreasOnVerticalMediumLine(const cv::Mat&, std::map<char, double>&, char, NumComparer, int);
+    static void ByWhiteAreasOnHorizontal3_4Line(const cv::Mat&, std::map<char, double>&, char, NumComparer, int);
+    static void ByOneWhiteAreaStartHorizontalLine(const cv::Mat&, std::map<char, double>&, char, NumComparer, int);
 
-    static void ByWhitePixelUpDownRate(const cv::Mat&, std::map<char, double>&, char);
-    static void ByWhitePixelUp_LeftRightRate(const cv::Mat&, std::map<char, double>&, char, bool);
+    static void ByWhitePixelUpDownDiff(const cv::Mat&, std::map<char, double>&, char, NumComparer, int);
+    static void ByWhitePixelUp_LeftRightDiff(const cv::Mat&, std::map<char, double>&, char, NumComparer, int);
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "CharExcluders.h"
 
-void CharExcluders::ByWhitePointsOnHorizontalMediumLine(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove)
+void CharExcluders::ByWhitePointsOnHorizontalMediumLine(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, NumComparer comp, int pixel_count)
 {
     int white_pixel_points = 0;
     int height = mat.rows, width = mat.cols;
@@ -12,11 +12,27 @@ void CharExcluders::ByWhitePointsOnHorizontalMediumLine(const cv::Mat& mat, std:
             white_pixel_points++;
     }
 
-    if (white_pixel_points >= 18 && cos_result.find(to_remove) != cos_result.end())
-        cos_result.erase(to_remove);
+    if (cos_result.find(to_remove) != cos_result.end())
+    {
+        switch (comp)
+        {
+        case NumComparer::Larger:
+            if (white_pixel_points > pixel_count)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Equal:
+            if (white_pixel_points == pixel_count)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Smaller:
+            if (white_pixel_points < pixel_count)
+                cos_result.erase(to_remove);
+            break;
+        }
+    }
 }
 
-void CharExcluders::ByWhiteAreasOnVerticalMediumLine(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove)
+void CharExcluders::ByWhiteAreasOnVerticalMediumLine(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, NumComparer comp, int area_count)
 {
     int height = mat.rows, width = mat.cols;
 
@@ -30,11 +46,27 @@ void CharExcluders::ByWhiteAreasOnVerticalMediumLine(const cv::Mat& mat, std::ma
         last_pixel = pixel;
     }
 
-    if (white_area_count < 3 && cos_result.find(to_remove) != cos_result.end())
-        cos_result.erase(to_remove);
+    if (cos_result.find(to_remove) != cos_result.end())
+    {
+        switch (comp)
+        {
+        case NumComparer::Larger:
+            if (white_area_count > area_count)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Equal:
+            if (white_area_count == area_count)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Smaller:
+            if (white_area_count < area_count)
+                cos_result.erase(to_remove);
+            break;
+        }
+    }
 }
 
-void CharExcluders::ByWhiteAreasOnHorizontal3_4Line(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove)
+void CharExcluders::ByWhiteAreasOnHorizontal3_4Line(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, NumComparer comp, int area_count)
 {
     int height = mat.rows, width = mat.cols;
 
@@ -48,11 +80,27 @@ void CharExcluders::ByWhiteAreasOnHorizontal3_4Line(const cv::Mat& mat, std::map
         last_pixel = pixel;
     }
 
-    if (white_area_count > 1 && cos_result.find(to_remove) != cos_result.end())
-        cos_result.erase(to_remove);
+    if (cos_result.find(to_remove) != cos_result.end())
+    {
+        switch (comp)
+        {
+        case NumComparer::Larger:
+            if (white_area_count > area_count)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Equal:
+            if (white_area_count == area_count)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Smaller:
+            if (white_area_count < area_count)
+                cos_result.erase(to_remove);
+            break;
+        }
+    }
 }
 
-void CharExcluders::ByWhiteAreasOnAllHorizontalLine(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove)
+void CharExcluders::ByOneWhiteAreaStartHorizontalLine(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, NumComparer comp, int line_height)
 {
     int height = mat.rows, width = mat.cols;
 
@@ -79,11 +127,27 @@ void CharExcluders::ByWhiteAreasOnAllHorizontalLine(const cv::Mat& mat, std::map
         }
     }
 
-    if (h_with_one_white_area_start > 30 && cos_result.find(to_remove) != cos_result.end())
-        cos_result.erase(to_remove);
+    if (cos_result.find(to_remove) != cos_result.end())
+    {
+        switch (comp)
+        {
+        case NumComparer::Larger:
+            if (h_with_one_white_area_start > line_height)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Equal:
+            if (h_with_one_white_area_start == line_height)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Smaller:
+            if (h_with_one_white_area_start < line_height)
+                cos_result.erase(to_remove);
+            break;
+        }
+    }
 }
 
-void CharExcluders::ByWhitePixelUpDownRate(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove)
+void CharExcluders::ByWhitePixelUpDownDiff(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, NumComparer comp, int threshold)
 {
     int height = mat.rows, width = mat.cols;
     int up_count = 0, down_count = 0;
@@ -100,11 +164,27 @@ void CharExcluders::ByWhitePixelUpDownRate(const cv::Mat& mat, std::map<char, do
         }
     }
 
-    if (up_count - down_count < 10 && cos_result.find(to_remove) != cos_result.end())
-        cos_result.erase(to_remove);
+    if (cos_result.find(to_remove) != cos_result.end())
+    {
+        switch (comp)
+        {
+        case NumComparer::Larger:
+            if (up_count - down_count > threshold)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Equal:
+            if (up_count - down_count == threshold)
+                cos_result.erase(to_remove);
+            break;
+        case NumComparer::Smaller:
+            if (up_count - down_count < threshold)
+                cos_result.erase(to_remove);
+            break;
+        }
+    }
 }
 
-void CharExcluders::ByWhitePixelUp_LeftRightRate(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, bool isLarger)
+void CharExcluders::ByWhitePixelUp_LeftRightDiff(const cv::Mat& mat, std::map<char, double>& cos_result, char to_remove, NumComparer comp, int threshold)
 {
     int height = mat.rows, width = mat.cols;
     int left_count = 0, right_count = 0;
@@ -126,16 +206,20 @@ void CharExcluders::ByWhitePixelUp_LeftRightRate(const cv::Mat& mat, std::map<ch
 
     if (cos_result.find(to_remove) != cos_result.end())
     {
-        if (isLarger)
+        switch (comp)
         {
-            if (abs(left_count - right_count) > 10)
+        case NumComparer::Larger:
+            if (left_count - right_count > threshold)
                 cos_result.erase(to_remove);
-        }
-        else
-        {
-            if (abs(left_count - right_count) < 10)
+            break;
+        case NumComparer::Equal:
+            if (left_count - right_count == threshold)
                 cos_result.erase(to_remove);
+            break;
+        case NumComparer::Smaller:
+            if (left_count - right_count < threshold)
+                cos_result.erase(to_remove);
+            break;
         }
-
     }
 }
