@@ -111,7 +111,7 @@ std::map<char, double> JudgeChar::GetPossibleChars(const cv::Mat& mat)
     if (res.find('X') != res.end())
     {
         CharExcluders::ByWhitePointsOnHorizontalMediumLine(mat, res, 'X', NumComparer::Larger, 18);
-        CharExcluders::ByWhitePixelUp_LeftRightDiff(mat, res, 'X', NumComparer::Smaller, 12);
+        CharExcluders::ByWhitePixelUp_LeftRightDiff(mat, res, 'X', NumComparer::Larger, 12);
     }
     if (res.find('Y') != res.end())
     {
