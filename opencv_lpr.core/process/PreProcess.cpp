@@ -15,6 +15,13 @@ int binarize_by_histogram(const cv::Mat& src)
 {
     int hist[256] = {0};
 
+    //cv::MatND histogram;
+    //const int histSize = 256;
+    //float range[] = { 0, 255 };
+    //const float *ranges[] = { range };
+    //const int channels = 0;
+    //cv::calcHist(&src, 1, &channels, cv::Mat(), histogram, 1, &histSize, &ranges[0], true, false);
+
     for (cv::MatConstIterator_<uchar> it = src.begin<uchar>(); it != src.end<uchar>(); ++it)
     {
         int pixel = *it;
@@ -28,14 +35,8 @@ int binarize_by_histogram(const cv::Mat& src)
 
 void reverse_if_needed(cv::Mat& src)
 {
-    int white_count = 0;
-
-    for (cv::MatIterator_<uchar> it = src.begin<uchar>(); it != src.end<uchar>(); ++it)
-    {
-        int pixel = *it;
-        if (pixel >= WHITE_THRESHOLD)
-            white_count++;
-    }
+    cv::Mat cmp = src >= cv::Mat(src.size(), CV_8UC1, cv::Scalar(WHITE_THRESHOLD));
+    int white_count = cv::countNonZero(cmp);
 
     if (white_count / (double)(src.rows * src.cols) > 0.5)
         cv::bitwise_not(src, src);
